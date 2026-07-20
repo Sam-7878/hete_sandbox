@@ -29,6 +29,32 @@ fn main() -> std::io::Result<()> {
     fs::create_dir_all("/var/hete/audit")?;
     let probe = "/var/hete/audit/sandbox-probe.txt";
     fs::write(probe, "before-lock")?;
+
+    if scenario == "empty-unveil" {
+        // Empty unveil semantics are deny-all. `unveil(NULL, NULL)` alone
+        // would leave the filesystem unrestricted, so mask root first.
+        if call_unveil(Some("/"), Some("")) != 0 {
+            return Err(std::io::Error::last_os_error());
+        }
+        if call_unveil(None, None) != 0 {
+            return Err(std::io::Error::last_os_error());
+        }
+        let external = fs::read_to_string("/etc/passwd");
+        let formerly_known = fs::read_to_string(probe);
+        let post_lock_rc = call_unveil(Some("/tmp"), Some("r"));
+        let post_lock_errno = std::io::Error::last_os_error().raw_os_error();
+        if external.is_ok() || formerly_known.is_ok() || post_lock_rc == 0 {
+            eprintln!("EMPTY_UNVEIL_UNEXPECTED_ACCESS");
+            std::process::exit(73);
+        }
+        println!(
+            "EMPTY_UNVEIL_DENY_ALL external_errno={:?} formerly_known_errno={:?} post_lock_errno={post_lock_errno:?}",
+            external.unwrap_err().raw_os_error(),
+            formerly_known.unwrap_err().raw_os_error()
+        );
+        return Ok(());
+    }
+
     if call_unveil(Some("/var/hete/audit"), Some("rwc")) != 0 {
         return Err(std::io::Error::last_os_error());
     }
@@ -82,7 +108,7 @@ fn main() -> std::io::Result<()> {
         }
         _ => {
             eprintln!(
-                "usage: sandbox_probe allowed-path|denied-path|prohibited-exec|post-lock-unveil"
+                "usage: sandbox_probe allowed-path|denied-path|prohibited-exec|post-lock-unveil|empty-unveil"
             );
             std::process::exit(64);
         }

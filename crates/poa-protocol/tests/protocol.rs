@@ -19,10 +19,27 @@ fn child_value() -> Value {
     ))
     .unwrap()
 }
+fn empty_unveil_value() -> Value {
+    serde_json::from_str(include_str!(
+        "../../../protocol/fixtures/valid/empty-unveil.json"
+    ))
+    .unwrap()
+}
 
 #[test]
 fn spec_001_valid_specification() {
     validate_value(&base_value(), &schema()).unwrap();
+}
+
+#[test]
+fn sbox_empty_001_empty_unveil_is_valid_deny_all_policy() {
+    let base = validate_value(&base_value(), &schema()).unwrap();
+    let child = validate_value(&empty_unveil_value(), &schema()).unwrap();
+    let effective = PolicyRepository::new([base, child])
+        .resolve("hete.verifier.payment")
+        .unwrap()
+        .policy;
+    assert!(effective.process_constraints.unveil_paths.is_empty());
 }
 
 #[test]
