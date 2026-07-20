@@ -20,6 +20,10 @@ rustc --version >"$out/rustc.txt" 2>&1
 cargo --version >"$out/cargo.txt" 2>&1
 printf '%s\n' "$source_commit" >"$out/source-commit.txt"
 
+cargo test --workspace --all-targets \
+  >"$out/native-cargo-test.stdout.log" 2>"$out/native-cargo-test.stderr.log"
+printf '%s\n' "$?" >"$out/native-cargo-test.exit_code"
+
 cargo build --release --bin openbsd_startup_probe --bin sandbox_probe --bin poa-verifier-example \
   >"$out/build.stdout.log" 2>"$out/build.stderr.log" || exit $?
 
