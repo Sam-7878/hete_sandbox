@@ -15,10 +15,14 @@ fn policy(mode: DeploymentMode) -> ProtocolSpec {
 
 #[test]
 fn sbox_001_development_noop_is_explicit() {
-    let mut state = StartupEnforcement {
-        listener_initialized: true,
-        ..Default::default()
-    };
+    let mut state = StartupEnforcement::default();
+    state
+        .prepare(
+            &NoOpDevelopmentBackend,
+            &policy(DeploymentMode::Development),
+        )
+        .unwrap();
+    state.listener_initialized = true;
     state
         .enforce_after_listener(
             &NoOpDevelopmentBackend,
@@ -31,6 +35,12 @@ fn sbox_001_development_noop_is_explicit() {
 #[test]
 fn sbox_007_requires_listener_first() {
     let mut state = StartupEnforcement::default();
+    state
+        .prepare(
+            &NoOpDevelopmentBackend,
+            &policy(DeploymentMode::Development),
+        )
+        .unwrap();
     assert!(
         state
             .enforce_after_listener(
@@ -44,14 +54,28 @@ fn sbox_007_requires_listener_first() {
 
 #[test]
 fn production_noop_fails_before_business_loop() {
+    let mut state = StartupEnforcement::default();
+    assert!(matches!(
+        state.prepare(&NoOpDevelopmentBackend, &policy(DeploymentMode::Production)),
+        Err(EnforcementError::InvalidPolicy(_))
+    ));
+    assert!(!state.business_loop_entered);
+}
+
+#[test]
+fn resources_must_be_prepared_before_listener_enforcement() {
     let mut state = StartupEnforcement {
         listener_initialized: true,
         ..Default::default()
     };
-    assert!(matches!(
-        state.enforce_after_listener(&NoOpDevelopmentBackend, &policy(DeploymentMode::Production)),
-        Err(EnforcementError::InvalidPolicy(_))
-    ));
+    assert!(
+        state
+            .enforce_after_listener(
+                &NoOpDevelopmentBackend,
+                &policy(DeploymentMode::Development)
+            )
+            .is_err()
+    );
     assert!(!state.business_loop_entered);
 }
 

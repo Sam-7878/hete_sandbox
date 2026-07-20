@@ -41,19 +41,32 @@ pub struct StartupEnforcement {
 }
 
 impl StartupEnforcement {
+    pub fn prepare(
+        &mut self,
+        backend: &dyn ProcessConstraintBackend,
+        policy: &EffectivePolicy,
+    ) -> Result<(), EnforcementError> {
+        backend.validate_policy(policy)?;
+        backend.prepare_resources(policy)?;
+        self.resources_prepared = true;
+        Ok(())
+    }
+
     pub fn enforce_after_listener(
         &mut self,
         backend: &dyn ProcessConstraintBackend,
         policy: &EffectivePolicy,
     ) -> Result<(), EnforcementError> {
+        if !self.resources_prepared {
+            return Err(EnforcementError::Resource(
+                "resources must be prepared before listener initialization".into(),
+            ));
+        }
         if !self.listener_initialized {
             return Err(EnforcementError::Resource(
                 "listener must be initialized before sandbox".into(),
             ));
         }
-        backend.validate_policy(policy)?;
-        backend.prepare_resources(policy)?;
-        self.resources_prepared = true;
         backend.apply_filesystem_constraints(&policy.process_constraints)?;
         self.filesystem_applied = true;
         backend.apply_process_constraints(&policy.process_constraints)?;

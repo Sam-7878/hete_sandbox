@@ -48,11 +48,12 @@ fn main() {
         let t_digest = started.elapsed().as_micros();
 
         let started = Instant::now();
+        let mut enforcement = StartupEnforcement::default();
+        enforcement
+            .prepare(&NoOpDevelopmentBackend, &effective)
+            .unwrap();
         let listener = TcpListener::bind("127.0.0.1:0").unwrap();
-        let mut enforcement = StartupEnforcement {
-            listener_initialized: true,
-            ..Default::default()
-        };
+        enforcement.listener_initialized = true;
         enforcement
             .enforce_after_listener(&NoOpDevelopmentBackend, &effective)
             .unwrap();

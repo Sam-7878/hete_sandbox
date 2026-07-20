@@ -32,7 +32,15 @@ impl ProcessConstraintBackend for OpenBsdBackend {
         Ok(())
     }
 
-    fn prepare_resources(&self, _: &EffectivePolicy) -> Result<(), EnforcementError> {
+    fn prepare_resources(&self, policy: &EffectivePolicy) -> Result<(), EnforcementError> {
+        for item in normalized_unveil(&policy.process_constraints)? {
+            std::fs::metadata(&item.path).map_err(|error| {
+                EnforcementError::Resource(format!(
+                    "required unveil path {} is unavailable: {error}",
+                    item.path
+                ))
+            })?;
+        }
         Ok(())
     }
 

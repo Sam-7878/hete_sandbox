@@ -28,18 +28,20 @@ fn main() -> anyhow::Result<()> {
     )?;
     let mut verifier = Verifier::new(effective.clone(), request_schema)?;
 
+    let backend = OpenBsdBackend;
+    let mut startup = StartupEnforcement::default();
+    startup
+        .prepare(&backend, &effective)
+        .context("prepare required resources before listener")?;
     let mut audit = OpenOptions::new()
         .create(true)
         .append(true)
         .open(&args[5])
         .context("open audit before sandbox")?;
     let listener = TcpListener::bind(&args[6]).context("bind listener before sandbox")?;
-    let mut startup = StartupEnforcement {
-        listener_initialized: true,
-        ..Default::default()
-    };
+    startup.listener_initialized = true;
     startup
-        .enforce_after_listener(&OpenBsdBackend, &effective)
+        .enforce_after_listener(&backend, &effective)
         .context("fail-closed sandbox application")?;
     eprintln!(
         "BUSINESS_LOOP_ENTERED policy_digest={}",
