@@ -36,4 +36,3 @@ where
         Err(reason) => TransitionOutcome::Abort(reason),
     }
 }
-

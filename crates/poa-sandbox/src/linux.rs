@@ -10,12 +10,21 @@ impl LinuxBackend {
 }
 
 impl ProcessConstraintBackend for LinuxBackend {
-    fn name(&self) -> &'static str { "linux-skeleton" }
-    fn validate_policy(&self, _: &EffectivePolicy) -> Result<(), EnforcementError> {
-        Err(EnforcementError::Unsupported("Linux enforcement is a non-evaluated skeleton".into()))
+    fn name(&self) -> &'static str {
+        "linux-skeleton"
     }
-    fn prepare_resources(&self, _: &EffectivePolicy) -> Result<(), EnforcementError> { unreachable!() }
-    fn apply_filesystem_constraints(&self, _: &ProcessConstraints) -> Result<(), EnforcementError> { unreachable!() }
-    fn apply_process_constraints(&self, _: &ProcessConstraints) -> Result<(), EnforcementError> { unreachable!() }
+    fn validate_policy(&self, _: &EffectivePolicy) -> Result<(), EnforcementError> {
+        Err(EnforcementError::Unsupported(
+            "Linux enforcement is a non-evaluated skeleton".into(),
+        ))
+    }
+    fn prepare_resources(&self, _: &EffectivePolicy) -> Result<(), EnforcementError> {
+        unreachable!()
+    }
+    fn apply_filesystem_constraints(&self, _: &ProcessConstraints) -> Result<(), EnforcementError> {
+        unreachable!()
+    }
+    fn apply_process_constraints(&self, _: &ProcessConstraints) -> Result<(), EnforcementError> {
+        unreachable!()
+    }
 }
-

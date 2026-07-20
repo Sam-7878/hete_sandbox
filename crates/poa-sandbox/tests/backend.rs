@@ -1,5 +1,7 @@
 use poa_protocol::{DeploymentMode, OsBackend, ProtocolSpec};
-use poa_sandbox::{EnforcementError, NoOpDevelopmentBackend, ProcessConstraintBackend, StartupEnforcement};
+use poa_sandbox::{
+    EnforcementError, NoOpDevelopmentBackend, ProcessConstraintBackend, StartupEnforcement,
+};
 
 fn policy(mode: DeploymentMode) -> ProtocolSpec {
     serde_json::from_value(serde_json::json!({
@@ -13,29 +15,50 @@ fn policy(mode: DeploymentMode) -> ProtocolSpec {
 
 #[test]
 fn sbox_001_development_noop_is_explicit() {
-    let mut state = StartupEnforcement { listener_initialized: true, ..Default::default() };
-    state.enforce_after_listener(&NoOpDevelopmentBackend, &policy(DeploymentMode::Development)).unwrap();
+    let mut state = StartupEnforcement {
+        listener_initialized: true,
+        ..Default::default()
+    };
+    state
+        .enforce_after_listener(
+            &NoOpDevelopmentBackend,
+            &policy(DeploymentMode::Development),
+        )
+        .unwrap();
     assert!(state.business_loop_entered);
 }
 
 #[test]
 fn sbox_007_requires_listener_first() {
     let mut state = StartupEnforcement::default();
-    assert!(state.enforce_after_listener(&NoOpDevelopmentBackend, &policy(DeploymentMode::Development)).is_err());
+    assert!(
+        state
+            .enforce_after_listener(
+                &NoOpDevelopmentBackend,
+                &policy(DeploymentMode::Development)
+            )
+            .is_err()
+    );
     assert!(!state.business_loop_entered);
 }
 
 #[test]
 fn production_noop_fails_before_business_loop() {
-    let mut state = StartupEnforcement { listener_initialized: true, ..Default::default() };
-    assert!(matches!(state.enforce_after_listener(&NoOpDevelopmentBackend, &policy(DeploymentMode::Production)), Err(EnforcementError::InvalidPolicy(_))));
+    let mut state = StartupEnforcement {
+        listener_initialized: true,
+        ..Default::default()
+    };
+    assert!(matches!(
+        state.enforce_after_listener(&NoOpDevelopmentBackend, &policy(DeploymentMode::Production)),
+        Err(EnforcementError::InvalidPolicy(_))
+    ));
     assert!(!state.business_loop_entered);
 }
 
 #[test]
 fn linux_skeleton_compiles_and_refuses_enforcement() {
     let p = policy(DeploymentMode::Development);
-    let mut p = p; p.process_constraints.os_backend = OsBackend::Linux;
+    let mut p = p;
+    p.process_constraints.os_backend = OsBackend::Linux;
     assert!(poa_sandbox::LinuxBackend.validate_policy(&p).is_err());
 }
-

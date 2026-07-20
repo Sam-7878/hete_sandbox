@@ -5,4 +5,3 @@ pub struct TransitionDescriptor<A, S, C, O> {
     pub context: C,
     pub operation: O,
 }
-

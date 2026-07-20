@@ -682,6 +682,7 @@ dependencies = [
  "chrono",
  "hex",
  "jsonschema",
+ "libc",
  "poa-core",
  "poa-protocol",
  "poa-sandbox",

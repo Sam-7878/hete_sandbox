@@ -21,8 +21,14 @@ pub trait ProcessConstraintBackend {
     fn name(&self) -> &'static str;
     fn validate_policy(&self, policy: &EffectivePolicy) -> Result<(), EnforcementError>;
     fn prepare_resources(&self, policy: &EffectivePolicy) -> Result<(), EnforcementError>;
-    fn apply_filesystem_constraints(&self, policy: &ProcessConstraints) -> Result<(), EnforcementError>;
-    fn apply_process_constraints(&self, policy: &ProcessConstraints) -> Result<(), EnforcementError>;
+    fn apply_filesystem_constraints(
+        &self,
+        policy: &ProcessConstraints,
+    ) -> Result<(), EnforcementError>;
+    fn apply_process_constraints(
+        &self,
+        policy: &ProcessConstraints,
+    ) -> Result<(), EnforcementError>;
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
@@ -41,7 +47,9 @@ impl StartupEnforcement {
         policy: &EffectivePolicy,
     ) -> Result<(), EnforcementError> {
         if !self.listener_initialized {
-            return Err(EnforcementError::Resource("listener must be initialized before sandbox".into()));
+            return Err(EnforcementError::Resource(
+                "listener must be initialized before sandbox".into(),
+            ));
         }
         backend.validate_policy(policy)?;
         backend.prepare_resources(policy)?;
@@ -54,4 +62,3 @@ impl StartupEnforcement {
         Ok(())
     }
 }
-

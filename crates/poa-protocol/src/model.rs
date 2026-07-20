@@ -49,7 +49,9 @@ pub struct DataConstraints {
     pub maximum_nesting_depth: usize,
 }
 
-fn default_nesting_depth() -> usize { 32 }
+fn default_nesting_depth() -> usize {
+    32
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -62,9 +64,11 @@ pub struct FailurePolicy {
     pub quarantine_threshold: u32,
 }
 
-fn default_quarantine_threshold() -> u32 { 3 }
+fn default_quarantine_threshold() -> u32 {
+    3
+}
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EndpointRule {
     pub protocol: String,
@@ -112,4 +116,3 @@ pub struct ProtocolSpec {
 }
 
 pub type EffectivePolicy = ProtocolSpec;
-

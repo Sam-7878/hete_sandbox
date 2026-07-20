@@ -6,4 +6,3 @@ pub fn policy_digest(policy: &EffectivePolicy) -> Result<String, serde_json::Err
     let bytes = canonicalize(policy)?;
     Ok(format!("sha256:{}", hex::encode(Sha256::digest(bytes))))
 }
-

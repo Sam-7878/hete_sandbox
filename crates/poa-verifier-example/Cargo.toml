@@ -9,6 +9,7 @@ anyhow.workspace = true
 chrono.workspace = true
 hex.workspace = true
 jsonschema.workspace = true
+libc.workspace = true
 poa-core = { path = "../poa-core" }
 poa-protocol = { path = "../poa-protocol" }
 poa-sandbox = { path = "../poa-sandbox" }
@@ -19,4 +20,3 @@ uuid.workspace = true
 
 [dev-dependencies]
 tempfile = "3"
-
