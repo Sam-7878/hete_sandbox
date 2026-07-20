@@ -56,4 +56,4 @@ $HOME/.cargo/bin/cargo test --workspace --all-targets
 sh evaluation/runners/run_ubuntu_evidence.sh
 ```
 
-검증된 source commit: `8408d5ced85f3d5f80f7b735f68197172b6434a8`
+검증된 source commit: `a1bfdfa41aa997f20fe071bff568f32fb2b768ff`

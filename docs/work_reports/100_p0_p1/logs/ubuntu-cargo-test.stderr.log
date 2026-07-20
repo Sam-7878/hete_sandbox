@@ -1,4 +1,4 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.74s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.69s
      Running unittests src/lib.rs (target/debug/deps/poa_core-5baf517243416c6e)
      Running unittests src/lib.rs (target/debug/deps/poa_protocol-ae202806f72dcf33)
      Running tests/protocol.rs (target/debug/deps/protocol-c971ab6ff4a2b3cd)
