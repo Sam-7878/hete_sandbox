@@ -1,1 +1,0 @@
-{"responses": [{"kind": "reject", "reason": "disallowed_operation"}, {"kind": "reject", "reason": "disallowed_operation"}, {"kind": "quarantine", "reason": "repeated_policy_violation"}], "scenario": "quarantine"}

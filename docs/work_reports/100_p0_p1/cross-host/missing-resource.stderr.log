@@ -1,4 +1,0 @@
-Error: prepare required resources before listener
-
-Caused by:
-    resource preparation failed: required unveil path /var/hete/definitely-missing-resource is unavailable: No such file or directory (os error 2)

@@ -1,1 +1,0 @@
-{"responses": [{"kind": "reject", "reason": "policy_digest_mismatch"}], "scenario": "wrong-digest"}
