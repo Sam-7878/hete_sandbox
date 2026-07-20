@@ -37,14 +37,17 @@ def percentile(values: list[int], fraction: float) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("raw", type=Path)
+    parser.add_argument("raw", type=Path, nargs="+")
     parser.add_argument("--markdown", type=Path, required=True)
     parser.add_argument("--latex", type=Path, required=True)
     args = parser.parse_args()
     records=[]
-    for number, line in enumerate(args.raw.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.strip(): continue
-        record=json.loads(line); validate(record, number); records.append(record)
+    line_number=0
+    for raw_path in args.raw:
+        for line in raw_path.read_text(encoding="utf-8").splitlines():
+            line_number += 1
+            if not line.strip(): continue
+            record=json.loads(line); validate(record, line_number); records.append(record)
     if not records: raise ValueError("raw evidence is empty")
     statuses=Counter(r["status"] for r in records)
     outcomes=Counter((r["expected_outcome"], r["observed_outcome"]) for r in records)
@@ -64,4 +67,3 @@ def main() -> None:
     args.latex.parent.mkdir(parents=True, exist_ok=True); args.latex.write_text("\n".join(latex)+"\n", encoding="utf-8")
 
 if __name__ == "__main__": main()
-
