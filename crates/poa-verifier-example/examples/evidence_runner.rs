@@ -41,6 +41,7 @@ fn request(v: &Verifier) -> Value {
     json!({"actor":"ubuntu-ledger-gateway","asset":"payment-transition-001","context":{"request_id":"req-evidence","expiry":1784553000_i64,"policy_digest":v.policy_digest()},"operation":"verify_transition","payload":{"amount":1000,"currency":"KRW"}})
 }
 
+#[allow(clippy::too_many_arguments)] // Mirrors the required flat raw-evidence schema.
 fn emit(
     test_id: &str,
     expected: &str,

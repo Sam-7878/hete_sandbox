@@ -35,12 +35,12 @@ pub fn normalized_unveil(policy: &ProcessConstraints) -> Result<Vec<UnveilPath>,
             )));
         }
         let normalized = path.to_string_lossy().to_string();
-        if let Some(existing) = paths.insert(normalized.clone(), item.permissions.clone()) {
-            if existing != item.permissions {
-                return Err(EnforcementError::InvalidPolicy(format!(
-                    "conflicting permissions for {normalized}"
-                )));
-            }
+        if let Some(existing) = paths.insert(normalized.clone(), item.permissions.clone())
+            && existing != item.permissions
+        {
+            return Err(EnforcementError::InvalidPolicy(format!(
+                "conflicting permissions for {normalized}"
+            )));
         }
     }
     Ok(paths
