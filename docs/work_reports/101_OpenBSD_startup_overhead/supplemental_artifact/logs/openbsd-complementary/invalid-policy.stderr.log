@@ -1,0 +1,4 @@
+Error: validate child policy
+
+Caused by:
+    policy validation failed: [ValidationIssue { code: "schema_validation", path: "", message: "\"failure_policy\" is a required property" }, ValidationIssue { code: "schema_validation", path: "/operations", message: "[] has less than 1 item" }]
