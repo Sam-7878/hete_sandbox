@@ -37,6 +37,18 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def evidence_commits(*paths: Path) -> list[str]:
+    commits = set()
+    for path in paths:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                record = json.loads(line)
+                commit = record.get("git_commit") or record.get("source_commit")
+                if commit:
+                    commits.add(commit)
+    return sorted(commits)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("report_dir", type=Path)
@@ -112,8 +124,14 @@ def main() -> None:
         text=True,
         capture_output=True,
     ).stdout.strip()
+    baseline_commits = evidence_commits(
+        args.baseline_dir / "raw/ubuntu-e2e.jsonl",
+        args.baseline_dir / "raw/openbsd-cross-host.jsonl",
+        args.baseline_dir / "raw/openbsd-native.jsonl",
+    )
     source_identification = {
-        "source_commit": args.source_commit,
+        "complementary_source_commit": args.source_commit,
+        "baseline_evidence_commits": baseline_commits,
         "branch": subprocess.run(
             ["git", "branch", "--show-current"], cwd=root, check=True, text=True, capture_output=True
         ).stdout.strip(),
@@ -130,6 +148,7 @@ def main() -> None:
         "This package supports traceability and regeneration of the evaluated POA specification, AACO outcomes, OpenBSD process enforcement, and startup measurements.",
         "",
         f"Evaluated source commit: `{args.source_commit}`.",
+        f"Historical P0/P1 baseline raw retains its original evidence commit(s): `{', '.join(baseline_commits)}`. Each raw record is authoritative for its own provenance.",
         "",
         "## Prerequisites and topology",
         "",
@@ -183,6 +202,7 @@ def main() -> None:
         "# Supplemental Artifact Manifest",
         "",
         f"- Evaluated source commit: `{args.source_commit}`",
+        f"- Historical baseline evidence commit(s): `{', '.join(baseline_commits)}`",
         f"- Packaged files (excluding hash manifest itself): {len(hashes)}",
         "- Integrity manifest: `supplemental_artifact/FILE_SHA256SUMS.json`",
         "- Credentials/private keys: not included; automated forbidden-pattern scan passed",
