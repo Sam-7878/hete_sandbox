@@ -4,7 +4,7 @@
 
 ## 요약
 
-빈 repository 골격에서 domain-neutral POA core, strict protocol validator/resolver, OpenBSD backend, AACO verifier example, evaluation pipeline을 구현했다. Ubuntu 24.04에서는 33개 Rust test가 모두 통과했고 application E2E raw record 8건 중 6건이 pass, OpenBSD 전용 2건은 `not_evaluated`로 기록됐다. OpenBSD native evidence는 host connection refusal 때문에 아직 완료되지 않았다.
+빈 repository 골격에서 domain-neutral POA core, strict protocol validator/resolver, OpenBSD backend, AACO verifier example, evaluation pipeline을 구현했다. Ubuntu 24.04에서는 34개 Rust test가 모두 통과했고 application E2E raw record 8건 중 6건이 pass, OpenBSD 전용 2건은 `not_evaluated`로 기록됐다. OpenBSD native evidence는 host connection refusal 때문에 아직 완료되지 않았다.
 
 ## 완료
 
@@ -17,6 +17,7 @@
 - audit record의 policy digest 및 payload hash binding
 - backend interface, explicit unsafe no-op development backend, Linux unsupported skeleton
 - OpenBSD `unveil`, `unveil(NULL,NULL)`, `pledge` mapper와 fail-closed startup state
+- empty unveil policy에서 `unveil("/", "")`를 먼저 적용하는 explicit Null Lock plan
 - request JSON Schema, maximum bytes, nesting depth, unknown-field/range enforcement
 - inbound/outbound IP/CIDR/port/protocol allowlist와 DNS-disabled hostname rejection
 - Cargo metadata 기반 dependency graph boundary check
@@ -56,4 +57,4 @@ $HOME/.cargo/bin/cargo test --workspace --all-targets
 sh evaluation/runners/run_ubuntu_evidence.sh
 ```
 
-검증된 source commit: `a1bfdfa41aa997f20fe071bff568f32fb2b768ff`
+검증된 source commit: `896ad4b96ed4339273cd53f829dcad309931cd28`

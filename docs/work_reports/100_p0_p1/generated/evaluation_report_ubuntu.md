@@ -9,7 +9,7 @@
 - Startup failures: 1
 - OpenBSD denial/termination records: 0
 - Distinct policy digests: 1
-- Duration (passed) P50/P95/max µs: 880/2417/2417
+- Duration (passed) P50/P95/max µs: 890/3250/3250
 
 ## Outcome confusion table
 

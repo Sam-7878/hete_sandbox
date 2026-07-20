@@ -10,8 +10,8 @@
 | Generic core does not depend on example/domain crates | Cargo workspace graph | ARCH-001 generated dependency graph | Verified |
 | Production no-op is rejected | validator/no-op backend | SPEC-008, production-noop backend test | Verified |
 | OpenBSD mapper applies unveil lock and pledge fail-closed | `poa-sandbox/openbsd.rs` | native runner/probe exists | Implemented, native evidence missing |
+| Empty unveil policy does not leave filesystem unrestricted | `poa-sandbox/mapper.rs` | `empty_unveil_policy_masks_root_before_lock` | Mapper plan verified; native evidence missing |
 | Denied filesystem access is enforced by OpenBSD kernel | `sandbox_probe denied-path` | E2E-005/SBOX-005 | Unverified |
 | Prohibited exec terminates process under pledge | `sandbox_probe prohibited-exec` | E2E-006/SBOX-006 | Unverified |
 | Application network policy restricts address/port/protocol | verifier allowlist | P1 network unit test, malformed CIDR test | Verified in application logic |
 | Startup overhead is characterized descriptively | startup measurement example | 20 raw Ubuntu records and generated summary | Verified for Ubuntu no-op only |
-
