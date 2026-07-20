@@ -19,6 +19,8 @@ checks=[
     ("SBOX-005","denied","denied",code("denied-path")==0 and "errno=Some(2)" in text("denied-path.stdout.log"),"denied"),
     ("SBOX-006","kernel_termination","kernel_termination",code("prohibited-exec")==134 and "Abort trap" in text("prohibited-exec.stderr.log"),"kernel_termination"),
     ("SBOX-008","denied","denied",code("post-lock-unveil")==0 and "errno=Some(1)" in text("post-lock-unveil.stdout.log"),"post_lock_denied"),
+    ("E2E-005","os_denial","os_denial",code("denied-path")==0 and "errno=Some(2)" in text("denied-path.stdout.log"),"denied"),
+    ("E2E-006","kernel_termination","kernel_termination",code("prohibited-exec")==134 and "Abort trap" in text("prohibited-exec.stderr.log"),"kernel_termination"),
 ]
 records=[]
 for test_id,expected,observed,passed,enforcement in checks:
