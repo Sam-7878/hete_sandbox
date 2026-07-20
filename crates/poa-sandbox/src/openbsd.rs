@@ -3,6 +3,8 @@ use std::ffi::CString;
 
 use poa_protocol::{EffectivePolicy, OsBackend, ProcessConstraints};
 
+#[cfg(target_os = "openbsd")]
+use crate::mapper::unveil_plan;
 use crate::mapper::{normalized_unveil, pledge_string};
 use crate::{EnforcementError, ProcessConstraintBackend};
 
@@ -42,7 +44,7 @@ impl ProcessConstraintBackend for OpenBsdBackend {
         unsafe extern "C" {
             fn unveil(path: *const libc::c_char, permissions: *const libc::c_char) -> libc::c_int;
         }
-        for item in normalized_unveil(policy)? {
+        for item in unveil_plan(policy)? {
             let path = CString::new(item.path.clone())
                 .map_err(|_| EnforcementError::InvalidPolicy("NUL in path".into()))?;
             let permissions = CString::new(item.permissions)

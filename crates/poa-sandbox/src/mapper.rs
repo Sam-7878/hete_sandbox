@@ -48,3 +48,18 @@ pub fn normalized_unveil(policy: &ProcessConstraints) -> Result<Vec<UnveilPath>,
         .map(|(path, permissions)| UnveilPath { path, permissions })
         .collect())
 }
+
+/// Builds the actual OpenBSD kernel call plan. `unveil(NULL, NULL)` alone
+/// leaves the filesystem unrestricted when no paths were unveiled, so an
+/// empty policy first masks the root with an empty permission set.
+pub fn unveil_plan(policy: &ProcessConstraints) -> Result<Vec<UnveilPath>, EnforcementError> {
+    let paths = normalized_unveil(policy)?;
+    if paths.is_empty() {
+        Ok(vec![UnveilPath {
+            path: "/".into(),
+            permissions: String::new(),
+        }])
+    } else {
+        Ok(paths)
+    }
+}

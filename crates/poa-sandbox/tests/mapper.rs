@@ -1,5 +1,5 @@
 use poa_protocol::{OsBackend, ProcessConstraints, UnveilPath};
-use poa_sandbox::mapper::{normalized_unveil, pledge_string};
+use poa_sandbox::mapper::{normalized_unveil, pledge_string, unveil_plan};
 
 fn constraints() -> ProcessConstraints {
     ProcessConstraints {
@@ -39,4 +39,15 @@ fn duplicate_path_conflict_rejected() {
         },
     ];
     assert!(normalized_unveil(&p).is_err());
+}
+
+#[test]
+fn empty_unveil_policy_masks_root_before_lock() {
+    assert_eq!(
+        unveil_plan(&constraints()).unwrap(),
+        vec![UnveilPath {
+            path: "/".into(),
+            permissions: String::new(),
+        }]
+    );
 }
