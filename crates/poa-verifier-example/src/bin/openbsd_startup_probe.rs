@@ -13,7 +13,8 @@ fn main() -> anyhow::Result<()> {
     use uuid::Uuid;
 
     fn elapsed_us(started: Instant) -> u64 {
-        u64::try_from(started.elapsed().as_micros()).unwrap_or(u64::MAX)
+        let nanos = started.elapsed().as_nanos();
+        u64::try_from(nanos.div_ceil(1_000)).unwrap_or(u64::MAX)
     }
 
     let args: Vec<String> = std::env::args().collect();

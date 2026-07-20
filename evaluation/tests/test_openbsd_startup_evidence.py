@@ -66,7 +66,7 @@ class StartupEvidenceTests(unittest.TestCase):
 
     def test_start_004_rejects_inconsistent_total(self) -> None:
         record = valid_record()
-        record["t_total_startup_us"] = 1
+        record["t_total_startup_us"] = 10_000
         with self.assertRaises(ValueError):
             validate_record(record)
 

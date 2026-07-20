@@ -68,10 +68,8 @@ def validate_record(record: dict, line_number: int = 1) -> None:
             raise ValueError(f"line {line_number}: {field} must be a non-negative integer")
     stage_sum = sum(record[field] for field in TIMING_FIELDS)
     total = record[TOTAL_FIELD]
-    if total < stage_sum:
-        raise ValueError(f"line {line_number}: total is smaller than measured stage sum")
-    residual = total - stage_sum
-    tolerance = max(2_000, math.ceil(total * 0.25))
+    residual = abs(total - stage_sum)
+    tolerance = max(100, math.ceil(total * 0.02))
     if residual > tolerance:
         raise ValueError(
             f"line {line_number}: uninstrumented residual {residual}us exceeds {tolerance}us"
@@ -143,7 +141,8 @@ def generate(records: list[dict], markdown: Path, latex: Path) -> None:
         [
             "",
             "Stage timers use Rust's monotonic `Instant`. `t_total_startup_us` is measured independently; ",
-            "the small difference from the stage sum is instrumentation/control-flow residual. Cache state was not forcibly flushed.",
+            "the small absolute difference from the stage sum is instrumentation/control-flow and per-stage rounding residual. ",
+            "Measured sub-microsecond stages are rounded upward to 1 µs; cache state was not forcibly flushed.",
         ]
     )
     markdown.parent.mkdir(parents=True, exist_ok=True)
