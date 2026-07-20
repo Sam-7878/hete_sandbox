@@ -227,3 +227,23 @@ fn dig_003_004_005_material_changes_change_digest() {
     assert_ne!(digest, policy_digest(&pledge).unwrap());
     assert_ne!(digest, policy_digest(&unveil).unwrap());
 }
+
+#[test]
+fn digest_golden_and_canonical_snapshot_match() {
+    let base = validate_value(&base_value(), &schema()).unwrap();
+    let child = validate_value(&child_value(), &schema()).unwrap();
+    let effective = PolicyRepository::new([base, child])
+        .resolve("hete.verifier.payment")
+        .unwrap()
+        .policy;
+    assert_eq!(
+        canonicalize(&effective).unwrap(),
+        include_bytes!("../../../protocol/examples/hete.verifier.payment.effective.canonical.json")
+            .strip_suffix(b"\n")
+            .unwrap()
+    );
+    assert_eq!(
+        policy_digest(&effective).unwrap(),
+        include_str!("../../../protocol/examples/hete.verifier.payment.effective.sha256").trim()
+    );
+}

@@ -31,9 +31,11 @@
     "quarantine_threshold": 3
   },
   "network_policy": {
-    "inbound": [{ "protocol": "tcp", "address": "127.0.0.1", "port": 7878 }],
+    "inbound": [
+      { "protocol": "tcp", "address": "127.0.0.1", "port": 7878 },
+      { "protocol": "tcp", "address": "192.168.1.0/24", "port": 7878 }
+    ],
     "outbound": [],
     "dns_enabled": false
   }
 }
-

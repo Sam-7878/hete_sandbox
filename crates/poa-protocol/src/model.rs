@@ -102,16 +102,16 @@ pub struct ProtocolSpec {
     pub schema: String,
     pub protocol_id: String,
     pub version: String,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub extends: Option<String>,
     pub mode: DeploymentMode,
     pub operations: Vec<OperationPolicy>,
     pub process_constraints: ProcessConstraints,
     pub data_constraints: DataConstraints,
     pub failure_policy: FailurePolicy,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub network_policy: Option<NetworkPolicy>,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub privilege_expansion: Option<PrivilegeExpansion>,
 }
 

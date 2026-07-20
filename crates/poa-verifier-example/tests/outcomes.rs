@@ -149,6 +149,7 @@ fn p1_input_unknown_field_and_size_rejected() {
 fn p1_network_allowlist_enforced() {
     let v = verifier();
     assert!(v.authorize_inbound("127.0.0.1".parse().unwrap(), 7878, "tcp"));
+    assert!(v.authorize_inbound("192.168.1.25".parse().unwrap(), 7878, "tcp"));
     assert!(!v.authorize_inbound("192.0.2.1".parse().unwrap(), 7878, "tcp"));
     assert!(!v.authorize_outbound("127.0.0.1".parse().unwrap(), 443, "tcp"));
 }
