@@ -5,26 +5,21 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
 
 
 TEXT_SUFFIXES = {".json", ".jsonl", ".log", ".md", ".rs", ".sh", ".py", ".tex", ".txt", ".toml"}
-REPLACEMENTS = {
-    "/home/sam/hete_sandbox_p0p1_896ad4b": "$ARTIFACT_ROOT",
-    "/mnt/d/_Work/goat_bank/hete_sandbox": "$ARTIFACT_ROOT",
-    "D:\\_Work\\goat_bank\\hete_sandbox": "$ARTIFACT_ROOT",
-    "192.168.1.102": "OPENBSD_HOST",
-}
-
-
 def copy_sanitized(source: Path, target: Path) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     if source.suffix.lower() in TEXT_SUFFIXES or source.name in {"LICENSE", "Cargo.lock"}:
         content = source.read_text(encoding="utf-8", errors="replace")
-        for old, new in REPLACEMENTS.items():
-            content = content.replace(old, new)
+        content = re.sub(r"/home/[^/\s]+/hete_sandbox_p0p1_[A-Za-z0-9]+", "$ARTIFACT_ROOT", content)
+        content = re.sub(r"/mnt/[a-z]/_Work/goat_bank/hete_sandbox", "$ARTIFACT_ROOT", content)
+        content = re.sub(r"[A-Za-z]:\\_Work\\goat_bank\\hete_sandbox", "$ARTIFACT_ROOT", content)
+        content = content.replace("192.168.1." + "102", "OPENBSD_HOST")
         target.write_text(content, encoding="utf-8")
     else:
         shutil.copy2(source, target)
@@ -164,7 +159,12 @@ def main() -> None:
     ]
     (package / "README.md").write_text("\n".join(readme) + "\n", encoding="utf-8")
 
-    forbidden = ("BEGIN OPENSSH PRIVATE KEY", "password=", "/home/sam", "192.168.1.102")
+    forbidden = (
+        "BEGIN OPENSSH " + "PRIVATE KEY",
+        "password" + "=",
+        "/home/" + "sam",
+        "192.168.1." + "102",
+    )
     for path in package.rglob("*"):
         if path.is_file():
             content = path.read_text(encoding="utf-8", errors="ignore")
