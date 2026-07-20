@@ -1,0 +1,8 @@
+timestamp_local=2026-07-20
+ssh_check=failed
+ssh_exit_code=255
+ssh_error=connection refused at configured endpoint
+windows_ssh_identity_note=configured identity path is a WSL path and was not accessible to Windows ssh
+hyperv_status_check=failed
+hyperv_error=current Codex execution account lacks Hyper-V query permission
+result=OpenBSD native evaluation not executed; no pass result inferred

@@ -1,0 +1,17 @@
+{
+  "build_profile": "cargo test (dev) and evidence runner (dev)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "cpu": "x86_64",
+  "git_commit": "8408d5ced85f3d5f80f7b735f68197172b6434a8",
+  "logical_cpu": 32,
+  "memory": "20479824 kB",
+  "os": "Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "os_release": "PRETTY_NAME=\"Ubuntu 24.04.4 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.4 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo",
+  "protocol_file_digest": "sha256:2f6a2ffac5aba75089b25b7ee2babe6fe09ff3a0b2493df3d46c39c053bf18e8",
+  "python": "3.12.3",
+  "python_executable": "/usr/bin/python3",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "schema_digest": "sha256:038fc653d7c478959a6ce9266118bc0e36eca4595c097b5fbbd626fc802b1152",
+  "timestamp": "2026-07-20T11:57:40.652963+00:00",
+  "virtualization": "WSL2"
+}
