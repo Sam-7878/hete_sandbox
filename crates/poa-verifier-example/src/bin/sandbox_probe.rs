@@ -67,9 +67,9 @@ fn main() -> std::io::Result<()> {
             std::process::exit(71);
         }
         "post-lock-unveil" => {
-            if call_pledge("stdio") != 0 {
-                return Err(std::io::Error::last_os_error());
-            }
+            // Isolate unveil-lock behavior from pledge. Applying pledge("stdio")
+            // first would terminate on the unveil syscall itself and would not
+            // demonstrate the post-lock EPERM result.
             let rc = call_unveil(Some("/tmp"), Some("r"));
             if rc == 0 {
                 eprintln!("POST_LOCK_UNVEIL_UNEXPECTEDLY_ALLOWED");
