@@ -1,0 +1,10 @@
+2026-07-20 Asia/Seoul
+Initial configured verifier endpoint 192.168.1.102:50051: connection refused.
+Interpretation: verifier_port is not the SSH endpoint.
+Retry SSH endpoint 192.168.1.102:22: success.
+Host key verification: strict pinned known-hosts, success.
+Remote OS: OpenBSD su.mshome.net 7.9 GENERIC.MP#449 amd64.
+Ubuntu client: Ubuntu 24.04.4 LTS under WSL2.
+Source commit deployed: d6210e48312f14b2ed19104a02c66e481bdb6a01.
+Cross-host scenarios: commit, reject, quarantine, abort, wrong-digest, malformed-spec, missing-resource; all passed.
+OpenBSD native tests: 35 passed, 0 failed.

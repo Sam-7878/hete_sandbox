@@ -1,0 +1,1 @@
+{"responses": [{"kind": "abort", "reason": {"internal_failure": "injected storage failure"}}], "scenario": "abort"}

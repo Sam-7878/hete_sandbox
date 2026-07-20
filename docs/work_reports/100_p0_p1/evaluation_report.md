@@ -1,22 +1,31 @@
 # Evaluation Report
 
-## Ubuntu 24.04 development evaluation
+## Ubuntu 24.04.4 development evaluation
 
-수치는 `raw/ubuntu-e2e.jsonl`에서 `evaluation/generate_report.py`로 생성했다.
+- Rust tests: 35 passed, 0 failed
+- Application evidence: 6 passed, 0 failed, OpenBSD 전용 2 not evaluated
+- Outcomes: Commit 1, Reject 2, Quarantine 1, Abort 1
+- Malformed specification: startup failure 1, listener not opened
+- Policy digest: 8 records에서 1개
+- Startup: 20회 no-op descriptive measurement
 
-- Rust tests: 34 passed, 0 failed
-- Application E2E: 6 passed, 0 failed, 2 not evaluated
-- Observed application outcomes: Commit 1, Reject 2, Quarantine 1, Abort 1
-- Fail-closed malformed specification: 1 passed, listener not opened
-- Policy digest stability: 8 records, 1 digest
-- OpenBSD kernel enforcement evidence: 0 records
+Ubuntu 수치의 authoritative artifact는 `raw/ubuntu-e2e.jsonl`, `raw/ubuntu-startup.jsonl`, `generated/evaluation_report_ubuntu.md`, `generated/startup_overhead_ubuntu.md`이다.
 
-상세 outcome confusion table은 `generated/evaluation_report_ubuntu.md`, LaTeX fragment는 `generated/evaluation_table_ubuntu.tex`가 authoritative generated artifact이다.
+## OpenBSD 7.9 native 및 cross-host evaluation
 
-## Startup overhead
+Vaccine real-time monitoring 해제 후 pinned host key와 SSH port 22를 사용해 재시도했다. `verifier_port` 50051은 SSH port가 아니며, 실제 verifier example은 TCP 7878을 사용한다.
 
-Ubuntu no-op development backend에서 20회 측정했다. 이 값은 OpenBSD enforcement cost가 아니며 성능 우월성 주장에 사용할 수 없다. P50/P95/max는 `generated/startup_overhead_ubuntu.md`에서 raw timing으로 자동 생성된다.
+- OpenBSD native Rust tests: 35 passed, 0 failed
+- Combined raw records: 13 passed, 0 failed, 0 not evaluated
+- Cross-host application: E2E-001/002/003/004/008 passed
+- Native kernel: SBOX-004/005/006/008 및 E2E-005/006 passed
+- Fail-closed startup: E2E-007 malformed spec, SBOX-003 missing resource passed
+- Startup failures: 2, 두 경우 모두 exit 1 및 listener closed
+- OpenBSD denial/termination records: 5
+- Policy digest: 13 records에서 1개
 
-## OpenBSD evaluation
+`prohibited-exec`의 exit 134와 `Abort trap (core dumped)`는 pledge 위반에 대한 기대 kernel termination이다. Denied path는 ENOENT(2), post-lock unveil은 EPERM(1)이 관측됐다.
 
-미실행. 설정된 SSH endpoint가 connection refused를 반환했고, 현재 Codex 실행 계정에는 Hyper-V VM 상태 조회 권한이 없었다. 이 실패를 pass 또는 예상 결과로 변환하지 않았다.
+OpenBSD raw에는 wall-clock duration을 계측하지 않아 생성 report의 duration은 0이다. 이는 성능 수치가 아니라 미계측 표시다.
+
+Authoritative artifact는 `raw/openbsd-cross-host.jsonl`, `raw/openbsd-native.jsonl`, `generated/evaluation_report_openbsd_combined.md`이다.

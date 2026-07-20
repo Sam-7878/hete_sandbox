@@ -1,0 +1,17 @@
+{
+  "build_profile": "cargo test (dev), verifier and sandbox_probe (release)",
+  "cargo": "cargo 1.94.1 (29ea6fb6a 2026-03-24) (built from a source tarball)",
+  "cpu": "13th Gen Intel(R) Core(TM) i9-13900HX",
+  "git_commit": "d6210e48312f14b2ed19104a02c66e481bdb6a01",
+  "logical_cpu": 16,
+  "memory_bytes": 3206479872,
+  "os": "OpenBSD 7.9 (GENERIC.MP) #449",
+  "python": "unavailable",
+  "protocol_file_digest": "sha256:2f6a2ffac5aba75089b25b7ee2babe6fe09ff3a0b2493df3d46c39c053bf18e8",
+  "rustc": "rustc 1.94.1 (e408947bf 2026-03-25) (built from a source tarball)",
+  "schema_digest": "sha256:038fc653d7c478959a6ce9266118bc0e36eca4595c097b5fbbd626fc802b1152",
+  "timestamp": "2026-07-20T13:01:07.4114091Z",
+  "uname": "OpenBSD su.mshome.net 7.9 GENERIC.MP#449 amd64",
+  "virtualization": "Hyper-V",
+  "verified_policy_digest": "sha256:3f3fbd07bb40da498804282a09ddbb2354050bd3a14bd9c5c845dd16bfd8404a"
+}
