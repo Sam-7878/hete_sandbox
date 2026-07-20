@@ -140,9 +140,7 @@ def generate(records: list[dict], markdown: Path, latex: Path) -> None:
     lines.extend(
         [
             "",
-            "Stage timers use Rust's monotonic `Instant`. `t_total_startup_us` is measured independently; ",
-            "the small absolute difference from the stage sum is instrumentation/control-flow and per-stage rounding residual. ",
-            "Measured sub-microsecond stages are rounded upward to 1 µs; cache state was not forcibly flushed.",
+            "Stage timers use Rust's monotonic `Instant`. `t_total_startup_us` is measured independently; the small absolute difference from the stage sum is instrumentation/control-flow and per-stage rounding residual. Measured sub-microsecond stages are rounded upward to 1 µs; cache state was not forcibly flushed.",
         ]
     )
     markdown.parent.mkdir(parents=True, exist_ok=True)

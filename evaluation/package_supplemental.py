@@ -20,6 +20,7 @@ def copy_sanitized(source: Path, target: Path) -> None:
         content = re.sub(r"/mnt/[a-z]/_Work/goat_bank/hete_sandbox", "$ARTIFACT_ROOT", content)
         content = re.sub(r"[A-Za-z]:\\_Work\\goat_bank\\hete_sandbox", "$ARTIFACT_ROOT", content)
         content = content.replace("192.168.1." + "102", "OPENBSD_HOST")
+        content = "\n".join(line.rstrip() for line in content.splitlines()).rstrip() + "\n"
         target.write_text(content, encoding="utf-8")
     else:
         shutil.copy2(source, target)
