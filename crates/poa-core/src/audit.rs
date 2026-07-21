@@ -1,6 +1,8 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+use crate::RiskAssessment;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct AuditRecord {
@@ -14,4 +16,6 @@ pub struct AuditRecord {
     pub timestamp: DateTime<Utc>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_hash: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub risk_evidence: Option<RiskAssessment>,
 }

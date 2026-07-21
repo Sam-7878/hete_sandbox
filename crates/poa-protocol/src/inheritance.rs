@@ -1,6 +1,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::{EffectivePolicy, OperationPolicy, PolicyError, ProtocolSpec, UnveilPath};
+use crate::{
+    EffectivePolicy, OperationPolicy, PolicyError, ProtocolSpec, RiskEvidencePolicy,
+    RiskThresholdMode, UnveilPath,
+};
 
 pub const DEFAULT_MAX_DEPTH: usize = 8;
 
@@ -79,6 +82,12 @@ fn approved(child: &ProtocolSpec) -> bool {
 
 fn merge(mut parent: ResolveResult, mut child: ProtocolSpec) -> Result<ResolveResult, PolicyError> {
     let allow_expansion = approved(&child);
+    merge_risk_evidence(
+        parent.policy.risk_evidence.as_ref(),
+        &mut child.risk_evidence,
+        allow_expansion,
+        &mut parent.expansion_audit,
+    )?;
     let parent_promises: BTreeSet<_> = parent
         .policy
         .process_constraints
@@ -233,6 +242,35 @@ fn merge(mut parent: ResolveResult, mut child: ProtocolSpec) -> Result<ResolveRe
         policy: child,
         expansion_audit: parent.expansion_audit,
     })
+}
+
+fn merge_risk_evidence(
+    parent: Option<&RiskEvidencePolicy>,
+    child: &mut Option<RiskEvidencePolicy>,
+    allow_expansion: bool,
+    audit: &mut Vec<String>,
+) -> Result<(), PolicyError> {
+    let Some(parent) = parent else { return Ok(()) };
+    let Some(child_policy) = child.as_ref() else {
+        *child = Some(parent.clone());
+        return Ok(());
+    };
+    let weakened = (parent.enabled && !child_policy.enabled)
+        || child_policy.minimum_occurrences < parent.minimum_occurrences
+        || child_policy.minimum_severity_bps < parent.minimum_severity_bps
+        || child_policy.minimum_confidence_bps < parent.minimum_confidence_bps
+        || matches!(parent.threshold_mode, RiskThresholdMode::AllThresholds)
+            && matches!(child_policy.threshold_mode, RiskThresholdMode::AnyThreshold);
+    if weakened && !allow_expansion {
+        return Err(PolicyError::PrivilegeExpansion {
+            path: "/risk_evidence".into(),
+            detail: "RiskEvidence quarantine policy weakened or disabled".into(),
+        });
+    }
+    if weakened {
+        audit.push("risk_evidence:weakened".into());
+    }
+    Ok(())
 }
 
 fn permission_subset(child: &str, parent: &str) -> bool {

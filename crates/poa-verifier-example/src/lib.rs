@@ -3,10 +3,14 @@ use std::net::IpAddr;
 
 use chrono::Utc;
 use poa_core::{
-    AacoHooks, AbortReason, AuditRecord, QuarantineReason, RejectReason, TransitionDescriptor,
-    TransitionOutcome, execute_transition,
+    AacoHooks, AbortReason, AuditRecord, BasisPoints, QuarantinePolicy, QuarantineReason,
+    RejectReason, RiskModelError, ThresholdMode, TransitionDescriptor, TransitionOutcome,
+    execute_transition,
 };
-use poa_protocol::{EffectivePolicy, EndpointRule, OperationPolicy, canonicalize, policy_digest};
+use poa_protocol::{
+    EffectivePolicy, EndpointRule, OperationPolicy, RiskEvidencePolicy, RiskThresholdMode,
+    canonicalize, policy_digest,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -105,6 +109,7 @@ impl Verifier {
             outcome: outcome.label().into(),
             timestamp: Utc::now(),
             payload_hash: Some(payload_hash),
+            risk_evidence: None,
         };
         ProcessingResult { outcome, audit }
     }
@@ -330,4 +335,19 @@ impl AacoHooks<String, String, RequestContext, String> for PaymentHooks<'_> {
 
 pub fn resolved_policy_canonical(policy: &EffectivePolicy) -> anyhow::Result<Vec<u8>> {
     Ok(canonicalize(policy)?)
+}
+
+pub fn quarantine_policy_from(
+    policy: &RiskEvidencePolicy,
+) -> Result<QuarantinePolicy, RiskModelError> {
+    QuarantinePolicy::new(
+        policy.enabled,
+        policy.minimum_occurrences,
+        BasisPoints::new(policy.minimum_severity_bps)?,
+        BasisPoints::new(policy.minimum_confidence_bps)?,
+        match policy.threshold_mode {
+            RiskThresholdMode::AllThresholds => ThresholdMode::AllThresholds,
+            RiskThresholdMode::AnyThreshold => ThresholdMode::AnyThreshold,
+        },
+    )
 }

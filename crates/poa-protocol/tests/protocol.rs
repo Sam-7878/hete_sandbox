@@ -1,6 +1,22 @@
 use poa_protocol::{PolicyError, PolicyRepository, canonicalize, policy_digest, validate_value};
 use serde_json::{Value, json};
 
+fn risk_policy(
+    enabled: bool,
+    occurrences: u32,
+    severity: u16,
+    confidence: u16,
+    mode: &str,
+) -> Value {
+    json!({
+        "enabled": enabled,
+        "minimum_occurrences": occurrences,
+        "minimum_severity_bps": severity,
+        "minimum_confidence_bps": confidence,
+        "threshold_mode": mode
+    })
+}
+
 fn schema() -> Value {
     serde_json::from_str(include_str!(
         "../../../protocol/schema/poa-protocol-v1.schema.json"
@@ -262,5 +278,89 @@ fn digest_golden_and_canonical_snapshot_match() {
     assert_eq!(
         policy_digest(&effective).unwrap(),
         include_str!("../../../protocol/examples/hete.verifier.payment.effective.sha256").trim()
+    );
+}
+
+#[test]
+fn re_protocol_optional_absence_preserves_legacy_golden_digest() {
+    let base = validate_value(&base_value(), &schema()).unwrap();
+    let child = validate_value(&child_value(), &schema()).unwrap();
+    let effective = PolicyRepository::new([base, child])
+        .resolve("hete.verifier.payment")
+        .unwrap()
+        .policy;
+    assert!(effective.risk_evidence.is_none());
+    assert_eq!(
+        policy_digest(&effective).unwrap(),
+        include_str!("../../../protocol/examples/hete.verifier.payment.effective.sha256").trim()
+    );
+}
+
+#[test]
+fn re_protocol_policy_is_strict_bounded_and_digest_bound() {
+    let mut value = child_value();
+    value["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
+    let spec = validate_value(&value, &schema()).unwrap();
+    let legacy = validate_value(&child_value(), &schema()).unwrap();
+    assert_ne!(
+        policy_digest(&spec).unwrap(),
+        policy_digest(&legacy).unwrap()
+    );
+
+    value["risk_evidence"]["minimum_confidence_bps"] = json!(10_001);
+    assert!(validate_value(&value, &schema()).is_err());
+    value["risk_evidence"]["minimum_confidence_bps"] = json!(8_000);
+    value["risk_evidence"]["surprise"] = json!(true);
+    assert!(validate_value(&value, &schema()).is_err());
+}
+
+#[test]
+fn re_protocol_runtime_evidence_is_not_accepted_as_policy() {
+    let mut value = child_value();
+    value["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
+    value["risk_evidence"]["observed_at_ms"] = json!(123);
+    assert!(validate_value(&value, &schema()).is_err());
+}
+
+#[test]
+fn re_protocol_child_omission_inherits_parent_risk_policy() {
+    let mut base = base_value();
+    base["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
+    let base = validate_value(&base, &schema()).unwrap();
+    let child = validate_value(&child_value(), &schema()).unwrap();
+    let effective = PolicyRepository::new([base, child])
+        .resolve("hete.verifier.payment")
+        .unwrap()
+        .policy;
+    assert_eq!(effective.risk_evidence.unwrap().minimum_occurrences, 3);
+}
+
+#[test]
+fn re_protocol_policy_weakening_requires_approved_expansion() {
+    let mut base = base_value();
+    base["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
+    let base = validate_value(&base, &schema()).unwrap();
+    let mut child_value = child_value();
+    child_value["risk_evidence"] = risk_policy(true, 2, 7_000, 7_000, "any_threshold");
+    let child = validate_value(&child_value, &schema()).unwrap();
+    assert!(matches!(
+        PolicyRepository::new([base.clone(), child.clone()]).resolve("hete.verifier.payment"),
+        Err(PolicyError::PrivilegeExpansion { .. })
+    ));
+
+    let mut approved = child;
+    approved.privilege_expansion = Some(poa_protocol::PrivilegeExpansion {
+        approved: true,
+        approval_id: "risk-change-1".into(),
+        reason: "reviewed exception".into(),
+    });
+    let result = PolicyRepository::new([base, approved])
+        .resolve("hete.verifier.payment")
+        .unwrap();
+    assert!(
+        result
+            .expansion_audit
+            .iter()
+            .any(|entry| entry == "risk_evidence:weakened")
     );
 }

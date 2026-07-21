@@ -9,12 +9,14 @@ pub enum RejectReason {
     InvalidInput(String),
     PolicyDigestMismatch,
     InvariantViolation(String),
+    RiskEvidenceInsufficient,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum QuarantineReason {
     RepeatedPolicyViolation,
+    RiskEvidenceThreshold,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

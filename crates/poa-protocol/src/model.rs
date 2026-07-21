@@ -95,6 +95,23 @@ pub struct PrivilegeExpansion {
     pub reason: String,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RiskThresholdMode {
+    AllThresholds,
+    AnyThreshold,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RiskEvidencePolicy {
+    pub enabled: bool,
+    pub minimum_occurrences: u32,
+    pub minimum_severity_bps: u16,
+    pub minimum_confidence_bps: u16,
+    pub threshold_mode: RiskThresholdMode,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ProtocolSpec {
@@ -111,6 +128,8 @@ pub struct ProtocolSpec {
     pub failure_policy: FailurePolicy,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub network_policy: Option<NetworkPolicy>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub risk_evidence: Option<RiskEvidencePolicy>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub privilege_expansion: Option<PrivilegeExpansion>,
 }

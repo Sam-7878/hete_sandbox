@@ -19,6 +19,7 @@
     "data_constraints": { "$ref": "#/$defs/dataConstraints" },
     "failure_policy": { "$ref": "#/$defs/failurePolicy" },
     "network_policy": { "$ref": "#/$defs/networkPolicy" },
+    "risk_evidence": { "$ref": "#/$defs/riskEvidencePolicy" },
     "privilege_expansion": { "$ref": "#/$defs/privilegeExpansion" }
   },
   "$defs": {
@@ -89,6 +90,17 @@
         "dns_enabled": { "type": "boolean" }
       }
     },
+    "riskEvidencePolicy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["enabled", "minimum_occurrences", "minimum_severity_bps", "minimum_confidence_bps", "threshold_mode"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "minimum_occurrences": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "minimum_severity_bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "minimum_confidence_bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "threshold_mode": { "enum": ["all_thresholds", "any_threshold"] }
+      }
+    },
     "privilegeExpansion": {
       "type": "object", "additionalProperties": false,
       "required": ["approved", "approval_id", "reason"],
@@ -100,4 +112,3 @@
     }
   }
 }
-
