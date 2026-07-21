@@ -13,7 +13,7 @@ fn risk_policy(
         "minimum_occurrences": occurrences,
         "minimum_severity_bps": severity,
         "minimum_confidence_bps": confidence,
-        "threshold_mode": mode
+        "aggregation": mode
     })
 }
 
@@ -326,7 +326,7 @@ fn re_protocol_risk_policy_golden_digest() {
         .policy;
     assert_eq!(
         policy_digest(&effective).unwrap(),
-        "sha256:c929994c702cb1ff008faf297146583618389af51d26bf53b7d6250a59bd8289"
+        "sha256:e70739ad11a746406e780800075b08f51c73dedd57892ee3a49a6eb4f847b778"
     );
 }
 

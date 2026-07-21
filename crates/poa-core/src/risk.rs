@@ -158,7 +158,7 @@ pub struct RiskEvidence {
     confidence_bps: BasisPoints,
     occurrences: u32,
     source: EvidenceSource,
-    observed_at_ms: i64,
+    observed_at_ms: u64,
     correlation_id: CorrelationId,
 }
 
@@ -170,7 +170,7 @@ struct RiskEvidenceWire {
     confidence_bps: BasisPoints,
     occurrences: u32,
     source: EvidenceSource,
-    observed_at_ms: i64,
+    observed_at_ms: u64,
     correlation_id: CorrelationId,
 }
 
@@ -182,7 +182,7 @@ impl RiskEvidence {
         confidence_bps: BasisPoints,
         occurrences: u32,
         source: EvidenceSource,
-        observed_at_ms: i64,
+        observed_at_ms: u64,
         correlation_id: CorrelationId,
     ) -> Result<Self, RiskModelError> {
         if occurrences == 0 {
@@ -214,7 +214,7 @@ impl RiskEvidence {
     pub const fn source(&self) -> EvidenceSource {
         self.source
     }
-    pub const fn observed_at_ms(&self) -> i64 {
+    pub const fn observed_at_ms(&self) -> u64 {
         self.observed_at_ms
     }
     pub fn correlation_id(&self) -> &CorrelationId {
@@ -243,7 +243,7 @@ impl<'de> Deserialize<'de> for RiskEvidence {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum ThresholdMode {
+pub enum EvidenceAggregation {
     AllThresholds,
     AnyThreshold,
 }
@@ -254,7 +254,7 @@ pub struct QuarantinePolicy {
     minimum_occurrences: u32,
     minimum_severity_bps: BasisPoints,
     minimum_confidence_bps: BasisPoints,
-    threshold_mode: ThresholdMode,
+    aggregation: EvidenceAggregation,
 }
 
 #[derive(Deserialize)]
@@ -264,7 +264,7 @@ struct QuarantinePolicyWire {
     minimum_occurrences: u32,
     minimum_severity_bps: BasisPoints,
     minimum_confidence_bps: BasisPoints,
-    threshold_mode: ThresholdMode,
+    aggregation: EvidenceAggregation,
 }
 
 impl QuarantinePolicy {
@@ -273,7 +273,7 @@ impl QuarantinePolicy {
         minimum_occurrences: u32,
         minimum_severity_bps: BasisPoints,
         minimum_confidence_bps: BasisPoints,
-        threshold_mode: ThresholdMode,
+        aggregation: EvidenceAggregation,
     ) -> Result<Self, RiskModelError> {
         if minimum_occurrences == 0 {
             return Err(RiskModelError::OccurrencesMustBePositive);
@@ -283,7 +283,7 @@ impl QuarantinePolicy {
             minimum_occurrences,
             minimum_severity_bps,
             minimum_confidence_bps,
-            threshold_mode,
+            aggregation,
         })
     }
 
@@ -299,8 +299,8 @@ impl QuarantinePolicy {
     pub const fn minimum_confidence(&self) -> BasisPoints {
         self.minimum_confidence_bps
     }
-    pub const fn threshold_mode(&self) -> ThresholdMode {
-        self.threshold_mode
+    pub const fn aggregation(&self) -> EvidenceAggregation {
+        self.aggregation
     }
 }
 
@@ -315,7 +315,7 @@ impl<'de> Deserialize<'de> for QuarantinePolicy {
             wire.minimum_occurrences,
             wire.minimum_severity_bps,
             wire.minimum_confidence_bps,
-            wire.threshold_mode,
+            wire.aggregation,
         )
         .map_err(serde::de::Error::custom)
     }
@@ -364,9 +364,9 @@ pub fn evaluate_evidence(evidence: &RiskEvidence, policy: &QuarantinePolicy) -> 
         .iter()
         .filter_map(|(threshold, passed)| passed.then_some(*threshold))
         .collect();
-    let satisfied = match policy.threshold_mode {
-        ThresholdMode::AllThresholds => matched.len() == checks.len(),
-        ThresholdMode::AnyThreshold => !matched.is_empty(),
+    let satisfied = match policy.aggregation {
+        EvidenceAggregation::AllThresholds => matched.len() == checks.len(),
+        EvidenceAggregation::AnyThreshold => !matched.is_empty(),
     };
     if satisfied {
         EvidenceDecision::Quarantine {

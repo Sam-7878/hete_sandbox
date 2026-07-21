@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
-    EffectivePolicy, OperationPolicy, PolicyError, ProtocolSpec, RiskEvidencePolicy,
-    RiskThresholdMode, UnveilPath,
+    EffectivePolicy, OperationPolicy, PolicyError, ProtocolSpec, RiskEvidenceAggregation,
+    RiskEvidencePolicy, UnveilPath,
 };
 
 pub const DEFAULT_MAX_DEPTH: usize = 8;
@@ -259,8 +259,11 @@ fn merge_risk_evidence(
         || child_policy.minimum_occurrences < parent.minimum_occurrences
         || child_policy.minimum_severity_bps < parent.minimum_severity_bps
         || child_policy.minimum_confidence_bps < parent.minimum_confidence_bps
-        || matches!(parent.threshold_mode, RiskThresholdMode::AllThresholds)
-            && matches!(child_policy.threshold_mode, RiskThresholdMode::AnyThreshold);
+        || matches!(parent.aggregation, RiskEvidenceAggregation::AllThresholds)
+            && matches!(
+                child_policy.aggregation,
+                RiskEvidenceAggregation::AnyThreshold
+            );
     if weakened && !allow_expansion {
         return Err(PolicyError::PrivilegeExpansion {
             path: "/risk_evidence".into(),

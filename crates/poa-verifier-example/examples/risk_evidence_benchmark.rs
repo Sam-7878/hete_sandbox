@@ -2,8 +2,8 @@ use std::hint::black_box;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use poa_core::{
-    BasisPoints, CorrelationId, EvidenceDecision, EvidenceSource, QuarantinePolicy, RiskCategory,
-    RiskEvidence, ThresholdMode, evaluate_evidence,
+    BasisPoints, CorrelationId, EvidenceAggregation, EvidenceDecision, EvidenceSource,
+    QuarantinePolicy, RiskCategory, RiskEvidence, evaluate_evidence,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -142,7 +142,7 @@ fn policy(enabled: bool, occurrences: u32, severity: u16, confidence: u16) -> Qu
         occurrences,
         bps(severity),
         bps(confidence),
-        ThresholdMode::AllThresholds,
+        EvidenceAggregation::AllThresholds,
     )
     .expect("valid benchmark policy")
 }

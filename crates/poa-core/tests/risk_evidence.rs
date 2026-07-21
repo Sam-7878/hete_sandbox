@@ -18,7 +18,7 @@ fn evidence(occurrences: u32, severity: u16, confidence: u16) -> RiskEvidence {
     .unwrap()
 }
 
-fn policy(enabled: bool, mode: ThresholdMode) -> QuarantinePolicy {
+fn policy(enabled: bool, mode: EvidenceAggregation) -> QuarantinePolicy {
     QuarantinePolicy::new(enabled, 3, bps(8_000), bps(8_000), mode).unwrap()
 }
 
@@ -107,7 +107,7 @@ fn re_eval_001_to_008_all_threshold_truth_table() {
             if bits & 2 != 0 { 8_000 } else { 7_999 },
             if bits & 4 != 0 { 8_000 } else { 7_999 },
         );
-        let decision = evaluate_evidence(&e, &policy(true, ThresholdMode::AllThresholds));
+        let decision = evaluate_evidence(&e, &policy(true, EvidenceAggregation::AllThresholds));
         assert_eq!(
             matches!(decision, EvidenceDecision::Quarantine { .. }),
             bits == 7,
@@ -126,7 +126,7 @@ fn re_eval_020_to_026_any_threshold_success_combinations() {
         );
         assert!(
             matches!(
-                evaluate_evidence(&e, &policy(true, ThresholdMode::AnyThreshold)),
+                evaluate_evidence(&e, &policy(true, EvidenceAggregation::AnyThreshold)),
                 EvidenceDecision::Quarantine { .. }
             ),
             "bits={bits}"
@@ -135,7 +135,7 @@ fn re_eval_020_to_026_any_threshold_success_combinations() {
     assert!(matches!(
         evaluate_evidence(
             &evidence(2, 7_999, 7_999),
-            &policy(true, ThresholdMode::AnyThreshold)
+            &policy(true, EvidenceAggregation::AnyThreshold)
         ),
         EvidenceDecision::Insufficient { .. }
     ));
@@ -146,7 +146,7 @@ fn re_dis_001_risk_disabled_rejects_and_re_dis_002_preserves_audit_data() {
     let original = evidence(9, 9_000, 9_000);
     let result = classify_failure(
         TransitionFailure::Risk(original.clone()),
-        Some(&policy(false, ThresholdMode::AllThresholds)),
+        Some(&policy(false, EvidenceAggregation::AllThresholds)),
     );
     assert!(matches!(
         result.outcome,
@@ -256,7 +256,7 @@ fn re_ker_001_to_004_risk_at_every_precommit_stage_quarantines() {
         let result = execute_transition_with_risk(
             &mut hooks,
             &descriptor(),
-            Some(&policy(true, ThresholdMode::AllThresholds)),
+            Some(&policy(true, EvidenceAggregation::AllThresholds)),
         );
         assert!(matches!(
             result.outcome,
@@ -270,7 +270,7 @@ fn re_ker_001_to_004_risk_at_every_precommit_stage_quarantines() {
 fn re_ker_005_insufficient_risk_rejects() {
     let result = classify_failure(
         TransitionFailure::Risk(evidence(2, 9_000, 9_000)),
-        Some(&policy(true, ThresholdMode::AllThresholds)),
+        Some(&policy(true, EvidenceAggregation::AllThresholds)),
     );
     assert!(matches!(
         result.outcome,
@@ -289,7 +289,7 @@ fn re_ker_006_policy_rejects_and_re_ker_007_internal_aborts() {
         let result = execute_transition_with_risk(
             &mut hooks,
             &descriptor(),
-            Some(&policy(true, ThresholdMode::AllThresholds)),
+            Some(&policy(true, EvidenceAggregation::AllThresholds)),
         );
         assert_eq!(result.outcome.label(), expected);
     }
@@ -311,7 +311,7 @@ fn re_state_001_to_005_candidates_never_leak_before_commit_and_retry_is_clean() 
         let _ = execute_transition_with_risk(
             &mut hooks,
             &descriptor(),
-            Some(&policy(true, ThresholdMode::AllThresholds)),
+            Some(&policy(true, EvidenceAggregation::AllThresholds)),
         );
         assert_eq!(hooks.committed, vec![41]);
         let _audit_only = serde_json::to_vec(&hooks.committed).unwrap();
@@ -320,7 +320,7 @@ fn re_state_001_to_005_candidates_never_leak_before_commit_and_retry_is_clean() 
         let retry = execute_transition_with_risk(
             &mut hooks,
             &descriptor(),
-            Some(&policy(true, ThresholdMode::AllThresholds)),
+            Some(&policy(true, EvidenceAggregation::AllThresholds)),
         );
         assert!(matches!(retry.outcome, TransitionOutcome::Commit));
         assert_eq!(hooks.committed.len(), 2);
@@ -331,7 +331,7 @@ fn re_state_001_to_005_candidates_never_leak_before_commit_and_retry_is_clean() 
 fn re_aud_001_to_006_structured_minimal_round_trip() {
     let result = classify_failure(
         TransitionFailure::Risk(evidence(3, 9_000, 8_500)),
-        Some(&policy(true, ThresholdMode::AllThresholds)),
+        Some(&policy(true, EvidenceAggregation::AllThresholds)),
     );
     let audit = AuditRecord {
         transition_id: "t".into(),
@@ -365,7 +365,7 @@ fn re_aud_001_to_006_structured_minimal_round_trip() {
 
 #[test]
 fn re_prop_001_to_006_deterministic_monotone_bounded_and_timestamp_independent() {
-    let p = policy(true, ThresholdMode::AllThresholds);
+    let p = policy(true, EvidenceAggregation::AllThresholds);
     for occurrences in 1..=6 {
         for severity in (0..=10_000).step_by(500) {
             for confidence in (0..=10_000).step_by(500) {
@@ -384,7 +384,7 @@ fn re_prop_001_to_006_deterministic_monotone_bounded_and_timestamp_independent()
                     ));
                 }
                 let mut value = serde_json::to_value(&low).unwrap();
-                value["observed_at_ms"] = serde_json::json!(-9_999_999_i64);
+                value["observed_at_ms"] = serde_json::json!(9_999_999_u64);
                 let changed: RiskEvidence = serde_json::from_value(value).unwrap();
                 assert_eq!(first, evaluate_evidence(&changed, &p));
             }
@@ -392,4 +392,7 @@ fn re_prop_001_to_006_deterministic_monotone_bounded_and_timestamp_independent()
     }
     assert!(serde_json::from_str::<BasisPoints>("10001").is_err());
     assert!(CorrelationId::new(" x ").is_err());
+    let mut invalid_timestamp = serde_json::to_value(evidence(1, 1, 1)).unwrap();
+    invalid_timestamp["observed_at_ms"] = serde_json::json!(-1);
+    assert!(serde_json::from_value::<RiskEvidence>(invalid_timestamp).is_err());
 }

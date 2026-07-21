@@ -17,7 +17,7 @@ A RiskEvidence value MUST contain:
 - `confidence`: integer basis points in `0..=10000`;
 - `occurrences`: integer of at least one;
 - `source`: one of `replay_window`, `geofence_engine`, `authentication_verifier`, `policy_validator`, `pattern_detector`, or `external_oracle`;
-- `observed_at_ms`: signed Unix epoch milliseconds;
+- `observed_at_ms`: unsigned Unix epoch milliseconds;
 - `correlation_id`: non-empty UTF-8, no leading/trailing whitespace or control characters, and no more than 128 bytes.
 
 Unknown object fields and unknown category/source values MUST be rejected. Implementations MUST NOT use floating-point values for basis points. `observed_at_ms` is provenance only and MUST NOT affect the threshold decision.
@@ -30,7 +30,7 @@ The protocol's top-level `risk_evidence` property MAY be absent. When present, i
 - `minimum_occurrences`: integer `1..=1000000`;
 - `minimum_severity_bps`: integer `0..=10000`;
 - `minimum_confidence_bps`: integer `0..=10000`;
-- `threshold_mode`: `all_thresholds` or `any_threshold`.
+- `aggregation`: `all_thresholds` or `any_threshold`.
 
 An absent or disabled policy MUST route a Risk failure to Reject. It MUST NOT silently route Risk to Commit or Quarantine.
 

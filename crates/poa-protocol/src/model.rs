@@ -97,7 +97,7 @@ pub struct PrivilegeExpansion {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum RiskThresholdMode {
+pub enum RiskEvidenceAggregation {
     AllThresholds,
     AnyThreshold,
 }
@@ -109,7 +109,7 @@ pub struct RiskEvidencePolicy {
     pub minimum_occurrences: u32,
     pub minimum_severity_bps: u16,
     pub minimum_confidence_bps: u16,
-    pub threshold_mode: RiskThresholdMode,
+    pub aggregation: RiskEvidenceAggregation,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

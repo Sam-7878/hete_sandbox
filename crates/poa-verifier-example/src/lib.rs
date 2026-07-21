@@ -3,12 +3,12 @@ use std::net::IpAddr;
 
 use chrono::Utc;
 use poa_core::{
-    AacoHooks, AbortReason, AuditRecord, BasisPoints, QuarantinePolicy, QuarantineReason,
-    RejectReason, RiskModelError, ThresholdMode, TransitionDescriptor, TransitionOutcome,
+    AacoHooks, AbortReason, AuditRecord, BasisPoints, EvidenceAggregation, QuarantinePolicy,
+    QuarantineReason, RejectReason, RiskModelError, TransitionDescriptor, TransitionOutcome,
     execute_transition,
 };
 use poa_protocol::{
-    EffectivePolicy, EndpointRule, OperationPolicy, RiskEvidencePolicy, RiskThresholdMode,
+    EffectivePolicy, EndpointRule, OperationPolicy, RiskEvidenceAggregation, RiskEvidencePolicy,
     canonicalize, policy_digest,
 };
 use serde::{Deserialize, Serialize};
@@ -345,9 +345,9 @@ pub fn quarantine_policy_from(
         policy.minimum_occurrences,
         BasisPoints::new(policy.minimum_severity_bps)?,
         BasisPoints::new(policy.minimum_confidence_bps)?,
-        match policy.threshold_mode {
-            RiskThresholdMode::AllThresholds => ThresholdMode::AllThresholds,
-            RiskThresholdMode::AnyThreshold => ThresholdMode::AnyThreshold,
+        match policy.aggregation {
+            RiskEvidenceAggregation::AllThresholds => EvidenceAggregation::AllThresholds,
+            RiskEvidenceAggregation::AnyThreshold => EvidenceAggregation::AnyThreshold,
         },
     )
 }

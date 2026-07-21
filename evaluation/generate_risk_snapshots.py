@@ -14,7 +14,7 @@ RISK_POLICY = {
     "minimum_confidence_bps": 8000,
     "minimum_occurrences": 3,
     "minimum_severity_bps": 8000,
-    "threshold_mode": "all_thresholds",
+    "aggregation": "all_thresholds",
 }
 
 

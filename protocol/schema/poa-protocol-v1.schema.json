@@ -92,13 +92,13 @@
     },
     "riskEvidencePolicy": {
       "type": "object", "additionalProperties": false,
-      "required": ["enabled", "minimum_occurrences", "minimum_severity_bps", "minimum_confidence_bps", "threshold_mode"],
+      "required": ["enabled", "minimum_occurrences", "minimum_severity_bps", "minimum_confidence_bps", "aggregation"],
       "properties": {
         "enabled": { "type": "boolean" },
         "minimum_occurrences": { "type": "integer", "minimum": 1, "maximum": 1000000 },
         "minimum_severity_bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
         "minimum_confidence_bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
-        "threshold_mode": { "enum": ["all_thresholds", "any_threshold"] }
+        "aggregation": { "enum": ["all_thresholds", "any_threshold"] }
       }
     },
     "privilegeExpansion": {
