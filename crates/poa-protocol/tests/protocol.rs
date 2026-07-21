@@ -315,6 +315,22 @@ fn re_protocol_policy_is_strict_bounded_and_digest_bound() {
 }
 
 #[test]
+fn re_protocol_risk_policy_golden_digest() {
+    let base = validate_value(&base_value(), &schema()).unwrap();
+    let mut child_value = child_value();
+    child_value["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
+    let child = validate_value(&child_value, &schema()).unwrap();
+    let effective = PolicyRepository::new([base, child])
+        .resolve("hete.verifier.payment")
+        .unwrap()
+        .policy;
+    assert_eq!(
+        policy_digest(&effective).unwrap(),
+        "sha256:c929994c702cb1ff008faf297146583618389af51d26bf53b7d6250a59bd8289"
+    );
+}
+
+#[test]
 fn re_protocol_runtime_evidence_is_not_accepted_as_policy() {
     let mut value = child_value();
     value["risk_evidence"] = risk_policy(true, 3, 8_000, 8_000, "all_thresholds");
