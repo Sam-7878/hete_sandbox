@@ -1,5 +1,0 @@
-hw.model=13th Gen Intel(R) Core(TM) i9-13900HX
-hw.ncpu=16
-hw.physmem=3206479872
-kern.version=OpenBSD 7.9 (GENERIC.MP) #449: Wed May  6 13:17:25 MDT 2026
-    deraadt@amd64.openbsd.org:/usr/src/sys/arch/amd64/compile/GENERIC.MP

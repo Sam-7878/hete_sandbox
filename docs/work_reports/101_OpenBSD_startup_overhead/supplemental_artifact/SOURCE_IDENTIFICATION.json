@@ -1,9 +1,0 @@
-{
-  "baseline_evidence_commits": [
-    "d6210e48312f14b2ed19104a02c66e481bdb6a01"
-  ],
-  "branch": "main",
-  "build_profile": "OpenBSD native release",
-  "complementary_source_commit": "ed9b6c2be2349bf328ca3f67a16e1b5dc392fb62",
-  "dirty_tracked_worktree": false
-}
