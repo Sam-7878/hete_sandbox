@@ -154,8 +154,8 @@ pub enum EvidenceSource {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct RiskEvidence {
     category: RiskCategory,
-    severity: BasisPoints,
-    confidence: BasisPoints,
+    severity_bps: BasisPoints,
+    confidence_bps: BasisPoints,
     occurrences: u32,
     source: EvidenceSource,
     observed_at_ms: i64,
@@ -166,8 +166,8 @@ pub struct RiskEvidence {
 #[serde(deny_unknown_fields)]
 struct RiskEvidenceWire {
     category: RiskCategory,
-    severity: BasisPoints,
-    confidence: BasisPoints,
+    severity_bps: BasisPoints,
+    confidence_bps: BasisPoints,
     occurrences: u32,
     source: EvidenceSource,
     observed_at_ms: i64,
@@ -178,8 +178,8 @@ impl RiskEvidence {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         category: RiskCategory,
-        severity: BasisPoints,
-        confidence: BasisPoints,
+        severity_bps: BasisPoints,
+        confidence_bps: BasisPoints,
         occurrences: u32,
         source: EvidenceSource,
         observed_at_ms: i64,
@@ -190,8 +190,8 @@ impl RiskEvidence {
         }
         Ok(Self {
             category,
-            severity,
-            confidence,
+            severity_bps,
+            confidence_bps,
             occurrences,
             source,
             observed_at_ms,
@@ -203,10 +203,10 @@ impl RiskEvidence {
         self.category
     }
     pub const fn severity(&self) -> BasisPoints {
-        self.severity
+        self.severity_bps
     }
     pub const fn confidence(&self) -> BasisPoints {
-        self.confidence
+        self.confidence_bps
     }
     pub const fn occurrences(&self) -> u32 {
         self.occurrences
@@ -230,8 +230,8 @@ impl<'de> Deserialize<'de> for RiskEvidence {
         let wire = RiskEvidenceWire::deserialize(deserializer)?;
         Self::new(
             wire.category,
-            wire.severity,
-            wire.confidence,
+            wire.severity_bps,
+            wire.confidence_bps,
             wire.occurrences,
             wire.source,
             wire.observed_at_ms,
@@ -252,8 +252,8 @@ pub enum ThresholdMode {
 pub struct QuarantinePolicy {
     enabled: bool,
     minimum_occurrences: u32,
-    minimum_severity: BasisPoints,
-    minimum_confidence: BasisPoints,
+    minimum_severity_bps: BasisPoints,
+    minimum_confidence_bps: BasisPoints,
     threshold_mode: ThresholdMode,
 }
 
@@ -262,8 +262,8 @@ pub struct QuarantinePolicy {
 struct QuarantinePolicyWire {
     enabled: bool,
     minimum_occurrences: u32,
-    minimum_severity: BasisPoints,
-    minimum_confidence: BasisPoints,
+    minimum_severity_bps: BasisPoints,
+    minimum_confidence_bps: BasisPoints,
     threshold_mode: ThresholdMode,
 }
 
@@ -271,8 +271,8 @@ impl QuarantinePolicy {
     pub fn new(
         enabled: bool,
         minimum_occurrences: u32,
-        minimum_severity: BasisPoints,
-        minimum_confidence: BasisPoints,
+        minimum_severity_bps: BasisPoints,
+        minimum_confidence_bps: BasisPoints,
         threshold_mode: ThresholdMode,
     ) -> Result<Self, RiskModelError> {
         if minimum_occurrences == 0 {
@@ -281,8 +281,8 @@ impl QuarantinePolicy {
         Ok(Self {
             enabled,
             minimum_occurrences,
-            minimum_severity,
-            minimum_confidence,
+            minimum_severity_bps,
+            minimum_confidence_bps,
             threshold_mode,
         })
     }
@@ -294,10 +294,10 @@ impl QuarantinePolicy {
         self.minimum_occurrences
     }
     pub const fn minimum_severity(&self) -> BasisPoints {
-        self.minimum_severity
+        self.minimum_severity_bps
     }
     pub const fn minimum_confidence(&self) -> BasisPoints {
-        self.minimum_confidence
+        self.minimum_confidence_bps
     }
     pub const fn threshold_mode(&self) -> ThresholdMode {
         self.threshold_mode
@@ -313,8 +313,8 @@ impl<'de> Deserialize<'de> for QuarantinePolicy {
         Self::new(
             wire.enabled,
             wire.minimum_occurrences,
-            wire.minimum_severity,
-            wire.minimum_confidence,
+            wire.minimum_severity_bps,
+            wire.minimum_confidence_bps,
             wire.threshold_mode,
         )
         .map_err(serde::de::Error::custom)
@@ -353,11 +353,11 @@ pub fn evaluate_evidence(evidence: &RiskEvidence, policy: &QuarantinePolicy) -> 
         ),
         (
             EvidenceThreshold::Severity,
-            evidence.severity >= policy.minimum_severity,
+            evidence.severity_bps >= policy.minimum_severity_bps,
         ),
         (
             EvidenceThreshold::Confidence,
-            evidence.confidence >= policy.minimum_confidence,
+            evidence.confidence_bps >= policy.minimum_confidence_bps,
         ),
     ];
     let matched: Vec<_> = checks
@@ -370,7 +370,7 @@ pub fn evaluate_evidence(evidence: &RiskEvidence, policy: &QuarantinePolicy) -> 
     };
     if satisfied {
         EvidenceDecision::Quarantine {
-            score_bps: evidence.severity.min(evidence.confidence),
+            score_bps: evidence.severity_bps.min(evidence.confidence_bps),
             matched_thresholds: matched,
         }
     } else {
