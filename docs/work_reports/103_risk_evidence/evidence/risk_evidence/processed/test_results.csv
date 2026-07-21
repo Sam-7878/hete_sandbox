@@ -1,0 +1,8 @@
+﻿platform,test_scope,command,passed,failed,filtered,status,notes
+Ubuntu 24.04,workspace,cargo test --workspace --all-features,60,0,0,passed,
+Ubuntu 24.04,format,cargo fmt --all -- --check,1,0,0,passed,
+Ubuntu 24.04,lint,cargo clippy --workspace --all-targets --all-features -- -D warnings,1,0,0,passed,
+OpenBSD 7.9,workspace,cargo test --workspace --all-features,60,0,0,passed,
+OpenBSD 7.9,poa-core risk filter,cargo test -p poa-core risk,3,0,15,passed,filter supplements full 18-test core run
+OpenBSD 7.9,format,cargo fmt --all -- --check,0,0,0,not_evaluated,cargo-fmt not installed
+OpenBSD 7.9,lint,cargo clippy --workspace --all-targets --all-features -- -D warnings,0,0,0,not_evaluated,cargo-clippy not installed

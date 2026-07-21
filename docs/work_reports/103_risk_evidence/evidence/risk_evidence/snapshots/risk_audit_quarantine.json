@@ -1,0 +1,32 @@
+{
+  "actor": "synthetic-agent",
+  "operation": "evaluate_transition",
+  "outcome": "quarantine",
+  "payload_hash": "sha256:example-redacted-payload-hash",
+  "policy_digest": "sha256:c929994c702cb1ff008faf297146583618389af51d26bf53b7d6250a59bd8289",
+  "protocol_id": "hete.verifier.payment",
+  "protocol_version": "1.0.0",
+  "risk_evidence": {
+    "decision": {
+      "kind": "quarantine",
+      "matched_thresholds": [
+        "occurrences",
+        "severity",
+        "confidence"
+      ],
+      "score_bps": 8500
+    },
+    "evidence": {
+      "category": "anomaly_signal",
+      "confidence_bps": 8500,
+      "correlation_id": "snapshot-correlation-001",
+      "observed_at_ms": 1751234567890,
+      "occurrences": 3,
+      "severity_bps": 9000,
+      "source": "pattern_detector"
+    },
+    "reason_code": "threshold_satisfied"
+  },
+  "timestamp": "2025-06-29T23:49:27.890Z",
+  "transition_id": "snapshot-transition-001"
+}

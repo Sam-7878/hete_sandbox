@@ -1,0 +1,32 @@
+﻿{
+  "benchmark_profile": "release",
+  "corpus": {
+    "id": "synthetic-risk-corpus-v1",
+    "negative_records": 8,
+    "positive_records": 8,
+    "record_count": 16,
+    "scope": "synthetic evaluator-routing study only"
+  },
+  "experiments": {
+    "B-RE1": {
+      "cases": ["disabled", "insufficient", "quarantine"],
+      "independent_runs": 30,
+      "inner_iterations": 100000,
+      "warmup_iterations": 20000
+    },
+    "B-RE2": {
+      "confidence_bps": [5000, 7000, 8000, 9000],
+      "minimum_occurrences": [1, 2, 3, 5],
+      "severity_bps": [5000, 7000, 8000, 9000],
+      "threshold_mode": "all_thresholds",
+      "total_configurations": 64
+    },
+    "B-RE3": {
+      "claim_scope": "one record and three scalar comparisons"
+    }
+  },
+  "git_commit": "dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0",
+  "generated_at_date": "2026-07-21",
+  "processor": "evaluation/process_risk_evidence.py",
+  "runner": "crates/poa-verifier-example/examples/risk_evidence_benchmark.rs"
+}
