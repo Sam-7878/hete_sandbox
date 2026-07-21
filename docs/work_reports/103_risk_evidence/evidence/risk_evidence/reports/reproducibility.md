@@ -2,7 +2,7 @@
 
 ## Source
 
-Use commit `dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0`. Run from the `hete_sandbox` root on Ubuntu 24.04.
+Use commit `c2128a9603d2a14d4927bfe72e5e1caf1306c829`. Run from the `hete_sandbox` root on Ubuntu 24.04.
 
 ```sh
 cargo fmt --all -- --check
@@ -15,7 +15,7 @@ cargo test -p poa-protocol risk
 ## Benchmark
 
 ```sh
-GIT_COMMIT=dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0 \
+GIT_COMMIT=c2128a9603d2a14d4927bfe72e5e1caf1306c829 \
 RUST_VERSION=rustc-1.96.0-ac68faa20 \
 cargo build --release -p poa-verifier-example --example risk_evidence_benchmark
 
@@ -36,7 +36,7 @@ B-RE1 uses 20,000 warmup calls per path, 30 samples per path, and 100,000 inner 
 python3 evaluation/generate_risk_snapshots.py \
   --legacy-canonical protocol/examples/hete.verifier.payment.effective.canonical.json \
   --output snapshots \
-  --git-commit dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0
+  --git-commit c2128a9603d2a14d4927bfe72e5e1caf1306c829
 ```
 
 ## OpenBSD

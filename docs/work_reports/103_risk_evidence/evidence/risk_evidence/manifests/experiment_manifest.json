@@ -18,14 +18,14 @@
       "confidence_bps": [5000, 7000, 8000, 9000],
       "minimum_occurrences": [1, 2, 3, 5],
       "severity_bps": [5000, 7000, 8000, 9000],
-      "threshold_mode": "all_thresholds",
+      "aggregation": "all_thresholds",
       "total_configurations": 64
     },
     "B-RE3": {
       "claim_scope": "one record and three scalar comparisons"
     }
   },
-  "git_commit": "dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0",
+  "git_commit": "c2128a9603d2a14d4927bfe72e5e1caf1306c829",
   "generated_at_date": "2026-07-21",
   "processor": "evaluation/process_risk_evidence.py",
   "runner": "crates/poa-verifier-example/examples/risk_evidence_benchmark.rs"

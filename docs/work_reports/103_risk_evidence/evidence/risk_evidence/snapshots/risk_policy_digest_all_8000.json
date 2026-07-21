@@ -66,14 +66,14 @@
     },
     "protocol_id": "hete.verifier.payment",
     "risk_evidence": {
+      "aggregation": "all_thresholds",
       "enabled": true,
       "minimum_confidence_bps": 8000,
       "minimum_occurrences": 3,
-      "minimum_severity_bps": 8000,
-      "threshold_mode": "all_thresholds"
+      "minimum_severity_bps": 8000
     },
     "version": "1.0.0"
   },
-  "git_commit": "dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0",
-  "policy_digest": "sha256:c929994c702cb1ff008faf297146583618389af51d26bf53b7d6250a59bd8289"
+  "git_commit": "c2128a9603d2a14d4927bfe72e5e1caf1306c829",
+  "policy_digest": "sha256:e70739ad11a746406e780800075b08f51c73dedd57892ee3a49a6eb4f847b778"
 }

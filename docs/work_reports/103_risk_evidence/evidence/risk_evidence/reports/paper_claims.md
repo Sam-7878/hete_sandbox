@@ -10,4 +10,4 @@ The following wording is supported by the supplied artifacts:
 6. The extension preserves existing non-risk AACO behavior, direct Quarantine behavior, and the absent-extension golden digest in the tested configurations.
 7. The evaluator performs a fixed number of scalar threshold comparisons for a single RiskEvidence record.
 
-Each statement is limited to source commit `dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0`, the documented tests, and the recorded environments.
+Each statement is limited to source commit `c2128a9603d2a14d4927bfe72e5e1caf1306c829`, the documented tests, and the recorded environments.

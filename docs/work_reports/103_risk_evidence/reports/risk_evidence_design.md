@@ -1,4 +1,4 @@
-# RiskEvidence Extension Design
+﻿# RiskEvidence Extension Design
 
 Date: 2026-07-21  
 Status: implementation baseline
@@ -13,7 +13,7 @@ RiskEvidence is an optional Quarantine policy extension. It does not become a re
 
 `CorrelationId` is a non-empty, trimmed, control-character-free UTF-8 string of at most 128 bytes. `RiskEvidence` contains category, severity basis points, confidence basis points, occurrences (`>= 1`), source, observation timestamp in Unix milliseconds, and correlation ID. JSON decoding rejects unknown fields and invalid values.
 
-`QuarantinePolicy` contains `enabled`, minimum occurrences, minimum severity, minimum confidence, and `ThresholdMode::{AllThresholds, AnyThreshold}`. Construction and deserialization validate every bound. No floating-point operations or clocks occur in evaluation.
+`QuarantinePolicy` contains `enabled`, minimum occurrences, minimum severity, minimum confidence, and `EvidenceAggregation::{AllThresholds, AnyThreshold}`. Construction and deserialization validate every bound. No floating-point operations or clocks occur in evaluation.
 
 ## Pure evaluation
 
@@ -59,7 +59,7 @@ Top-level `risk_evidence` is optional. When present, all five fields are require
   "minimum_occurrences": 3,
   "minimum_severity_bps": 8000,
   "minimum_confidence_bps": 8000,
-  "threshold_mode": "all_thresholds"
+  "aggregation": "all_thresholds"
 }
 ```
 

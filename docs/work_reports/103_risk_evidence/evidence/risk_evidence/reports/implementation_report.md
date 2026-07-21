@@ -1,6 +1,6 @@
 ﻿# RiskEvidence Implementation Report
 
-Source commit: `dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0`
+Source commit: `c2128a9603d2a14d4927bfe72e5e1caf1306c829`
 
 ## Result
 
@@ -21,6 +21,6 @@ Audit records carry an optional structured assessment with evidence, reason code
 
 ## Benchmark summary
 
-On the recorded Ubuntu/WSL2 environment, median per-evaluation release times were 1.849 ns disabled, 18.816 ns insufficient, and 18.890 ns Quarantine. These are microbenchmark results from 30 independent samples with 100,000 inner evaluations and 20,000 warmups; they are not end-to-end transition latency.
+On the recorded Ubuntu/WSL2 environment, median per-evaluation release times were 1.868 ns disabled, 18.389 ns insufficient, and 18.822 ns Quarantine. These are microbenchmark results from 30 independent samples with 100,000 inner evaluations and 20,000 warmups; they are not end-to-end transition latency.
 
 The 64-configuration synthetic sensitivity grid shows threshold-dependent precision/recall. The highest supplied-corpus F1 was 0.9333 at multiple configurations, including occurrences=1, severity=7000, confidence=8000. This does not establish an optimal production threshold or real-world detection accuracy.

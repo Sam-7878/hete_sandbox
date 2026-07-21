@@ -5,7 +5,7 @@
   "cargo_fmt": "not installed",
   "cpu_count_visible": 16,
   "cpu_model": "13th Gen Intel(R) Core(TM) i9-13900HX",
-  "git_commit": "dcf07a26308146a8766b9d8f07f0fc85a7d5b3a0",
+  "git_commit": "c2128a9603d2a14d4927bfe72e5e1caf1306c829",
   "host_key_sha256": "SHA256:qdGQydu/PllGWhS79GW+ut+nkEqYJ0ozNwghQoFc/rY",
   "operating_system": "OpenBSD 7.9 GENERIC.MP#449",
   "remote_connection_source": "security/open_bsd_connection.json",
