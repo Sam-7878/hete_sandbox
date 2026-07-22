@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "measured_source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+  "reporting_commit": "12c9c8f9fa116809841eff01daa9aaf5fdede358",
+  "artifact_tag": "v0.2.0-paper-rc1",
+  "datasets": [
+    {
+      "dataset_id": "full_benchmark",
+      "file_count": 31,
+      "row_count": 210000,
+      "manifest_path": "evaluation/results/raw/full_benchmark/benchmark_manifest.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "concurrency_failure",
+      "file_count": 2,
+      "row_count": 360,
+      "manifest_path": "evaluation/results/raw/concurrency_failure/manifest.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "attack_campaign",
+      "file_count": 2,
+      "row_count": 1470,
+      "manifest_path": "evaluation/results/raw/attack_campaign/summary.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "privacy_linkability",
+      "file_count": 3,
+      "row_count": 46,
+      "manifest_path": "evaluation/results/raw/privacy_linkability/privacy_report.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "external_adapter",
+      "file_count": 1,
+      "row_count": 60000,
+      "manifest_path": "evaluation/results/raw/adapter_comparison.csv",
+      "status": "VERIFIED"
+    }
+  ],
+  "formal_runs": [
+    {
+      "run_id": "publication-safety-20260722",
+      "type": "safety",
+      "result_path": "formal/results/tlc/publication-safety-20260722/",
+      "status": "VERIFIED"
+    },
+    {
+      "run_id": "publication-liveness-20260722",
+      "type": "liveness",
+      "result_path": "formal/results/tlc/publication-liveness-20260722/",
+      "status": "VERIFIED"
+    }
+  ],
+  "analysis_scripts": [
+    "evaluation/analysis/aggregate_results.py",
+    "evaluation/analysis/generate_figures.py",
+    "evaluation/analysis/generate_tables.py",
+    "evaluation/analysis/statistical_tests.py",
+    "evaluation/analysis/verify_raw_hashes.py"
+  ],
+  "claims": [
+    "CLM-001",
+    "CLM-002",
+    "CLM-003",
+    "CLM-004",
+    "CLM-005",
+    "CLM-006",
+    "CLM-007",
+    "CLM-008",
+    "CLM-009",
+    "CLM-010",
+    "CLM-011",
+    "CLM-012",
+    "CLM-013",
+    "CLM-014"
+  ],
+  "known_limitations": [
+    "WSL2 calibration host requires native Ubuntu rerun for final deployment claims",
+    "TLC is bounded model checking on finite configuration; not an unbounded proof",
+    "Attack campaign uses test-gated scenario aggregation",
+    "Privacy audit verifies absence of configured markers; not GDPR certification"
+  ],
+  "native_validation_status": "WSL2_CALIBRATION_COMPLETE_NATIVE_RERUN_RECOMMENDED"
+}

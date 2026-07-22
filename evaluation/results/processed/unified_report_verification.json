@@ -1,0 +1,178 @@
+[
+  {
+    "statement_id": "WP13-B0-MEAN",
+    "report_value": 94014,
+    "recomputed_value": 94014.29,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B1-MEAN",
+    "report_value": 205761,
+    "recomputed_value": 205760.86,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B2-MEAN",
+    "report_value": 182361,
+    "recomputed_value": 182361.43,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B3-MEAN",
+    "report_value": 205464,
+    "recomputed_value": 205463.64,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B4-MEAN",
+    "report_value": 204200,
+    "recomputed_value": 204199.57,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B5-MEAN",
+    "report_value": 203894,
+    "recomputed_value": 203893.91,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP13-B6-MEAN",
+    "report_value": 204925,
+    "recomputed_value": 204924.62,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/full_benchmark/run_001.csv ... run_030.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified_with_rounding"
+  },
+  {
+    "statement_id": "WP11-SAFETY-STATES",
+    "report_value": 490,
+    "recomputed_value": 490,
+    "unit": "count",
+    "source_files": [
+      "formal/results/tlc/publication-safety-20260722/summary.json"
+    ],
+    "sampling_unit": "tlc_state_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP11-SAFETY-DISTINCT",
+    "report_value": 204,
+    "recomputed_value": 204,
+    "unit": "count",
+    "source_files": [
+      "formal/results/tlc/publication-safety-20260722/summary.json"
+    ],
+    "sampling_unit": "tlc_state_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP11-LIVENESS-STATES",
+    "report_value": 294,
+    "recomputed_value": 294,
+    "unit": "count",
+    "source_files": [
+      "formal/results/tlc/publication-liveness-20260722/summary.json"
+    ],
+    "sampling_unit": "tlc_state_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP11-LIVENESS-DISTINCT",
+    "report_value": 130,
+    "recomputed_value": 130,
+    "unit": "count",
+    "source_files": [
+      "formal/results/tlc/publication-liveness-20260722/summary.json"
+    ],
+    "sampling_unit": "tlc_state_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP14-CONCURRENCY-CONDITIONS",
+    "report_value": 360,
+    "recomputed_value": 360,
+    "unit": "count",
+    "source_files": [
+      "evaluation/results/raw/concurrency_failure/campaign.csv"
+    ],
+    "sampling_unit": "harness_condition_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP15-ATTACK-TYPES",
+    "report_value": 49,
+    "recomputed_value": 49,
+    "unit": "count",
+    "source_files": [
+      "evaluation/results/raw/attack_campaign/attack_results.csv"
+    ],
+    "sampling_unit": "attack_type_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP15-DEFENSE-ATTEMPTS",
+    "report_value": 1320000,
+    "recomputed_value": 1320000,
+    "unit": "count",
+    "source_files": [
+      "evaluation/results/raw/attack_campaign/summary.json"
+    ],
+    "sampling_unit": "classified_attempt_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP16-SCANNED-FIELD-OCCURRENCES",
+    "report_value": 5910000,
+    "recomputed_value": 5910000,
+    "unit": "count",
+    "source_files": [
+      "evaluation/results/raw/privacy_linkability/privacy_report.json"
+    ],
+    "sampling_unit": "field_scanner_count",
+    "status": "verified"
+  },
+  {
+    "statement_id": "WP17-SQLITE-MEAN",
+    "report_value": 42061,
+    "recomputed_value": 42061.0,
+    "unit": "ns",
+    "source_files": [
+      "evaluation/results/raw/adapter_comparison.csv"
+    ],
+    "sampling_unit": "independent_run_mean",
+    "status": "verified"
+  }
+]
