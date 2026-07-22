@@ -1,0 +1,52 @@
+{
+  "build_profile": "dev",
+  "commands": [
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/check_architecture.py"
+    ],
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/check_warrant_invariants.py",
+      "--skip-rust"
+    ],
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/experiments/functional_correctness.py",
+      "--smoke",
+      "--output",
+      "evaluation/results/raw/functional.json"
+    ],
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/experiments/scale_benchmark.py",
+      "--smoke",
+      "--output",
+      "evaluation/results/raw/warrant_scale.csv"
+    ],
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/experiments/attack_simulation.py",
+      "--output",
+      "evaluation/results/raw/warrant_attack.csv"
+    ],
+    [
+      "/mnt/d/_Work/goat_bank/.venv/bin/python",
+      "evaluation/experiments/privacy_surface_audit.py",
+      "--output",
+      "evaluation/results/processed/privacy_audit.json"
+    ]
+  ],
+  "host": {
+    "distribution": "Ubuntu",
+    "os": "Ubuntu 24.04.4 LTS",
+    "python": "3.12.13",
+    "python_environment": "/mnt/d/_Work/goat_bank/.venv",
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "virtualization": "WSL2"
+  },
+  "mode": "smoke",
+  "source_commit": "039e0aaee3be0bc5fe9d8ac1acd2b871005d8538",
+  "status": "passed",
+  "working_tree": "dirty-development-output"
+}

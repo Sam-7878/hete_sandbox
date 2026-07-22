@@ -1,0 +1,8 @@
+baseline,iterations,median_ns,p95_ns,p99_ns,stdev_ns,measurement
+B0,20,3051,3295,3295,123,policy-processing-microbenchmark-not-enforcement-latency
+B1,20,3249,3762,3762,186,policy-processing-microbenchmark-not-enforcement-latency
+B2,20,3514,8552,8552,4643,policy-processing-microbenchmark-not-enforcement-latency
+B3,20,3861,4013,4013,97,policy-processing-microbenchmark-not-enforcement-latency
+B4,20,4559,4664,4664,52,policy-processing-microbenchmark-not-enforcement-latency
+B5,20,5060,8484,8484,1283,policy-processing-microbenchmark-not-enforcement-latency
+B6,20,4686,11347,11347,3689,policy-processing-microbenchmark-not-enforcement-latency

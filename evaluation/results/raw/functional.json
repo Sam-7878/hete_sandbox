@@ -1,0 +1,14 @@
+{
+  "experiment": "functional_correctness",
+  "mode": "smoke",
+  "note": "Outcome expectations are assertions consumed by Rust tests; they are not measured performance results.",
+  "outcomes": {
+    "abort": 2,
+    "commit": 3,
+    "quarantine": 1,
+    "reject": 4
+  },
+  "scenario_count": 10,
+  "source": "evaluation/fixtures/electronic_warrant/scenarios.json",
+  "status": "passed"
+}

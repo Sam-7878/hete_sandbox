@@ -1,3 +1,4 @@
+use serde::Serialize;
 use serde_json::{Map, Value};
 
 use crate::EffectivePolicy;
@@ -44,6 +45,15 @@ fn normalize(value: Value, parent_key: Option<&str>) -> Value {
         }
         scalar => scalar,
     }
+}
+
+/// Canonicalize an arbitrary serializable policy value.
+///
+/// This routine performs no semantic validation. Callers must deserialize into
+/// a fail-closed type before canonicalization. Object keys are sorted and only
+/// explicitly set-like protocol arrays are reordered.
+pub fn canonicalize_value<T: Serialize>(value: &T) -> Result<Vec<u8>, serde_json::Error> {
+    serde_json::to_vec(&normalize(serde_json::to_value(value)?, None))
 }
 
 pub fn canonicalize(policy: &EffectivePolicy) -> Result<Vec<u8>, serde_json::Error> {

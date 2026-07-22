@@ -36,7 +36,9 @@ release/
 target/
 
 # docs/architecture/
-docs/work_reports/
+docs/work_reports/*
+!docs/work_reports/104_electronic_warrant/
+!docs/work_reports/104_electronic_warrant/*.md
 
 # data/
 wasm/

@@ -1,0 +1,13 @@
+scenario,attempts,successful_unauthorized_or_escape,asr,brr,interpretation
+replay,100,0,0.0,1.0,blocked_by_reference_model
+cross_domain_replay,100,0,0.0,1.0,blocked_by_reference_model
+credential_mutation,100,0,0.0,1.0,blocked_by_reference_model
+signer_omission,100,0,0.0,1.0,blocked_by_reference_model
+stolen_one_key_below_threshold,100,0,0.0,1.0,blocked_by_reference_model
+duplicate_warrant,100,0,0.0,1.0,blocked_by_reference_model
+concurrent_stale_snapshot,100,0,0.0,1.0,blocked_by_reference_model
+policy_downgrade,100,0,0.0,1.0,blocked_by_reference_model
+privilege_expansion,100,0,0.0,1.0,blocked_by_reference_model
+post_activation_transfer,100,0,0.0,1.0,blocked_by_reference_model
+public_commit_target_secrecy,100,100,1.0,0.0,explicit_non_guarantee
+public_commit_ordering_guarantee,100,100,1.0,0.0,explicit_non_guarantee

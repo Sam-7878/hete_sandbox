@@ -1,0 +1,25 @@
+name: electronic-warrant
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - run: cargo test --workspace --all-features
+      - run: python evaluation/check_architecture.py
+      - run: python evaluation/check_warrant_invariants.py --skip-rust
+      - run: python evaluation/check_formal_model.py
+      - run: python evaluation/experiments/functional_correctness.py --smoke

@@ -1,0 +1,7 @@
+{
+  "files_scanned": 10,
+  "findings": [],
+  "linkability_limit": "stable policy and target digests remain correlatable within their configured epoch",
+  "plaintext_exposure_count": 0,
+  "status": "passed"
+}

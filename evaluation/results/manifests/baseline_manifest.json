@@ -1,0 +1,20 @@
+{
+  "manifest_version": "1",
+  "source_commit": "039e0aaee3be0bc5fe9d8ac1acd2b871005d8538",
+  "captured_at": "2026-07-22T00:00:00+09:00",
+  "build_profile": "dev",
+  "host": {
+    "os": "Ubuntu 24.04.4 LTS",
+    "virtualization": "WSL2",
+    "distribution": "Ubuntu",
+    "rustc": "1.96.0 (ac68faa20 2026-05-25)",
+    "python": "3.12.13",
+    "python_environment": "/mnt/d/_Work/goat_bank/.venv"
+  },
+  "repository_clean_before_work": true,
+  "sandbox_backend": "linux/noop evidence only; OpenBSD native verification is separate",
+  "commands": [
+    "cargo test --workspace",
+    "python evaluation/check_architecture.py"
+  ]
+}
