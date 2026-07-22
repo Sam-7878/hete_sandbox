@@ -1,0 +1,32 @@
+[
+  {
+    "mapping_present": true,
+    "salt_present": true,
+    "backup_present": false,
+    "recoverable": true
+  },
+  {
+    "mapping_present": false,
+    "salt_present": true,
+    "backup_present": false,
+    "recoverable": false
+  },
+  {
+    "mapping_present": true,
+    "salt_present": false,
+    "backup_present": false,
+    "recoverable": true
+  },
+  {
+    "mapping_present": false,
+    "salt_present": false,
+    "backup_present": true,
+    "recoverable": true
+  },
+  {
+    "mapping_present": false,
+    "salt_present": false,
+    "backup_present": false,
+    "recoverable": false
+  }
+]

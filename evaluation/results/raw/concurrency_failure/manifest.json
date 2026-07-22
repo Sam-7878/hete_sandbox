@@ -1,0 +1,37 @@
+{
+  "attempts_per_condition": 1000,
+  "concurrency_levels": [
+    1,
+    4,
+    16,
+    64,
+    128,
+    256
+  ],
+  "conditions": 360,
+  "csv_sha256": "2d1e30b0ae9188443d7a6812b88c5db87af8e781548747cb58349798e8db76a2",
+  "failure_rates": [
+    0.0,
+    0.001,
+    0.01,
+    0.05,
+    0.1
+  ],
+  "host_id": "HS-4070",
+  "scenarios": [
+    "same_target_multiple_reservations",
+    "duplicate_execute",
+    "transfer_freeze_race",
+    "expiry_execute_boundary",
+    "revocation_commit_race",
+    "stale_snapshot",
+    "audit_write_failure",
+    "prepare_failure",
+    "commit_failure",
+    "rollback_failure_simulation",
+    "high_reservation_contention",
+    "multiple_asset_contention"
+  ],
+  "status": "passed",
+  "virtualization": "WSL2"
+}

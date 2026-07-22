@@ -1,0 +1,39 @@
+{
+  "figures": 14,
+  "files": {
+    "figure_01_architecture_overview.png": "b54223edac703568ee9df8375124e3058e4ef4b13efa6440ded1c55a2de2e94d",
+    "figure_01_architecture_overview.svg": "180d58bc60af8804f4e0df8f2b76bf2549e92169e7a53f9cb38a63f36fc54f7c",
+    "figure_02_trust_boundary_sequence.png": "96407d291a0e6121f8ea372b9a4bdf25e8d41cbc1d1ea2e44b2de1618d4d0094",
+    "figure_02_trust_boundary_sequence.svg": "aa7e2841f03028a70e59c6e6685188e04881174d8b3fef2a0e7f3cf12659ceab",
+    "figure_03_warrant_lifecycle.png": "03304706423eb17756af807dccd79c03052d29bc044a1925bb84d38a9bf4b879",
+    "figure_03_warrant_lifecycle.svg": "b06e5a242b09c9cd1195f5c6667d92e4480f607367caa00b1ec670ac2ba7cd70",
+    "figure_04_baseline_total_latency.png": "e5527076e78c1ce971144a275e66299c09dd4cc10daa8ec903ef5fa22eb762c1",
+    "figure_04_baseline_total_latency.svg": "a2a3c0081eed5c56eaaeb45169d011172034ae610d8becb7098866be74721d15",
+    "figure_05_stage_latency.png": "3e6db9e29aa3d9b75924aac4b689cb8bf5d64644929ca5a37f7cc100d5b58054",
+    "figure_05_stage_latency.svg": "0c5a590012cd6d26e026bd830b05b1c12419033fe42b86d0cf3b3a7a77bc08c4",
+    "figure_06_throughput_concurrency.png": "180b4165958bf41d783aae2fee40095c057657d8530c8ff4988a1327b79a0d2f",
+    "figure_06_throughput_concurrency.svg": "4e8266f6bab0a59a0c90a2d31bbc0f7e8664953032ecc3f17fe7d90d7fec2242",
+    "figure_07_latency_authority.png": "12b5d7b96786a6538d9f8f8a6ee6c646b1d5c402aadfc7a6f322bcf678dfaded",
+    "figure_07_latency_authority.svg": "8275c45e0fc759f0f9f91469d8297fb844f276b3cc7b28b168947518eb9029ea",
+    "figure_08_latency_credential.png": "3378066595b48c374fe74f3a2979e2875052b57dfb601c23453f8085e2cdb4af",
+    "figure_08_latency_credential.svg": "b80573f59bddfef35a6e87f7e62106bdd26acf26ca71803a613409094ccd4cd1",
+    "figure_09_memory_storage.png": "ee8dbc8e2a828dd759e92afb941c34b3930ebaa686a6cd161098718fd8028734",
+    "figure_09_memory_storage.svg": "1c7570dd8a39b5a90398ee5b8f874595fb7983830d6e0142eaa045818d5292b1",
+    "figure_10_attack_asr_brr.png": "1b1ff24d54d9b8e89a79d9aaa35912cd3ebb3ff68a36c2427279f65054960800",
+    "figure_10_attack_asr_brr.svg": "8a40b899c81602242afcb998c9ab228ce80ebf92c34dabc1f90aa99001713c42",
+    "figure_11_privacy_linkability.png": "1d33ae907e7a6bab959010645480dd73b2c976d76418ebfa056b2fd0493768a4",
+    "figure_11_privacy_linkability.svg": "8e369e5440dfe163a174e304bcc5108278782e6f793fdfe44fb807a53058399a",
+    "figure_12_adapter_comparison.png": "98324e4128f066dde416bf4e296252b480733917fc7da4af8d5dbd2b932ad53f",
+    "figure_12_adapter_comparison.svg": "6e9e677d2599e77ae923d065beb47bf7e11475cd1a5e326428872cd95d4fbdd2",
+    "figure_13_formal_summary.png": "d9040e837b09503c047622a9cd8ab262e0dc1a90774489a49c29a6017014942d",
+    "figure_13_formal_summary.svg": "8090b74e405cbf52c3cd9094a831b45249bb48b002a20e3f7514ab6f02d4de51",
+    "figure_14_domain_reuse.png": "9164be77ab5c58a5e440b80b3bdda7526befaac9f49493d472e2fb37eda21e23",
+    "figure_14_domain_reuse.svg": "1e48bec61f6288ae6459eac689f3f3d16189525d8e80925716281468b8e81b6a"
+  },
+  "formats": [
+    "png",
+    "svg"
+  ],
+  "raw_hash_inventory_sha256": "a42de03c7547c84404e5ce649a89129d562bc12c0e29439ffe2bfe4023faf1c7",
+  "status": "passed"
+}

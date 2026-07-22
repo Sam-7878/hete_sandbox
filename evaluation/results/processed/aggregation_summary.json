@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "benchmark_rows": 210000,
+  "independent_runs": 30,
+  "baseline_count": 7
+}

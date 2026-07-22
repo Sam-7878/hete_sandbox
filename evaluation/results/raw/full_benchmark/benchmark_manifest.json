@@ -1,0 +1,207 @@
+{
+  "baseline_ids": [
+    "B0",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6"
+  ],
+  "build_profile": "release",
+  "elapsed_seconds": 42.072617530822754,
+  "files": [
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_001.csv",
+      "rows": 7000,
+      "seed": 574294,
+      "sha256": "a6ce2f4b5fa3672b5a55a13ddf26dfbe2da92297468c7fd60c96c2aed15dc30e"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_002.csv",
+      "rows": 7000,
+      "seed": 816257,
+      "sha256": "fe7a90af0abbd22790a5bab3a901a2e98f321e39d799cac175566be9ca5f03ea"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_003.csv",
+      "rows": 7000,
+      "seed": 420310,
+      "sha256": "76c9ea36d137a03fce41d61e60bc6cf10462951bbb17be4878b260e89cf192ba"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_004.csv",
+      "rows": 7000,
+      "seed": 70873,
+      "sha256": "8dbc5d0fcec8353c90ec8444cf85ea456b7013ad8ef49a280a92a58ef46b1fbe"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_005.csv",
+      "rows": 7000,
+      "seed": 419660,
+      "sha256": "b24c06b7114c9a6e736025d3ab94713aed343c9f84b51b5414cbe5a74d13133e"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_006.csv",
+      "rows": 7000,
+      "seed": 596027,
+      "sha256": "1c29be80e9b57a850e6958d6111bc2f0d279bae87246f5bf60dbd08af2d2693a"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_007.csv",
+      "rows": 7000,
+      "seed": 55414,
+      "sha256": "73038871d9e8b92ed9196bbf0d4c731d13473a406eb94082e557d589da96b42c"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_008.csv",
+      "rows": 7000,
+      "seed": 256205,
+      "sha256": "0e22909b48f7a6d72b02adce6ce21c1a185c5cbe0f93743fb46ba20bc59628ee"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_009.csv",
+      "rows": 7000,
+      "seed": 120795,
+      "sha256": "863f43a67b70329331a1cb98f27a6ea06316ed5375af9a3df91ce5c3a0b45683"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_010.csv",
+      "rows": 7000,
+      "seed": 83443,
+      "sha256": "901518c2f59a80f8a116ba08947520bd792fd31fa4392b8eac87b9efdb6d4160"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_011.csv",
+      "rows": 7000,
+      "seed": 692055,
+      "sha256": "98b0ec66871c90e766d7d56d9de7452449bd8ba62b07b81f60228b6709467d52"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_012.csv",
+      "rows": 7000,
+      "seed": 873497,
+      "sha256": "dadbd304d88a41248e7c463f637d31bb1ff82c0cf56f5a905f7f9f99de8c0264"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_013.csv",
+      "rows": 7000,
+      "seed": 438707,
+      "sha256": "c2646e5bd95e1d1c7e40e98c7a0cdb40c40c1da11964da8a978e4a338fb384ca"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_014.csv",
+      "rows": 7000,
+      "seed": 606545,
+      "sha256": "66b2517db9184b1cc73e885574c9269fd2d55094c257072d2bcb22a004b3f1e2"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_015.csv",
+      "rows": 7000,
+      "seed": 256589,
+      "sha256": "e4bd2fe0fc3c6299982a9be40c6a86f6846fbfd43ec8aef6e76273bef77f1089"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_016.csv",
+      "rows": 7000,
+      "seed": 430637,
+      "sha256": "a4765b5ab2c095021367240c722dbd1fe498f5f4365142e2b6a9eea55890d2b9"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_017.csv",
+      "rows": 7000,
+      "seed": 734151,
+      "sha256": "b9d3ad67a2fc4de1ee23b20bc28d74dd87ecfb5c176239bd4e00a983139f9da4"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_018.csv",
+      "rows": 7000,
+      "seed": 910971,
+      "sha256": "b4b9735656b46c5ee1819270c632d1154adda432fd65948aeb7894d13ccc8da3"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_019.csv",
+      "rows": 7000,
+      "seed": 290348,
+      "sha256": "67725eb88e00577eeb62cedb678b2dcf2061a262999931e4829b054e3002f5bb"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_020.csv",
+      "rows": 7000,
+      "seed": 141563,
+      "sha256": "1e0e48d2f7f9648d36a21da0e81960bf48cc4987c18270e1350c1bda64868911"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_021.csv",
+      "rows": 7000,
+      "seed": 297227,
+      "sha256": "616c65ffafe2ea90cafafd369b3bfd1235ea22c7f5d236b6a2856c17d19dfbee"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_022.csv",
+      "rows": 7000,
+      "seed": 531039,
+      "sha256": "0a3572bfbe9f8ac7bf9343fb72675c253c206503815abc32e2a94997cb57c9fb"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_023.csv",
+      "rows": 7000,
+      "seed": 648119,
+      "sha256": "f4ec8588062df29406ccd55cebb064822333130c38f172cee515c79cdd14ee7a"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_024.csv",
+      "rows": 7000,
+      "seed": 390696,
+      "sha256": "77f1b2ec3cbb4f6e7a45848a11c420c4c8235d8c4935aaaab431b079f9dfe816"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_025.csv",
+      "rows": 7000,
+      "seed": 389877,
+      "sha256": "8c9dc046d6814b2bb551e7e5251a9575df679ac82048279b4ddbfc6f3d1b83ae"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_026.csv",
+      "rows": 7000,
+      "seed": 661606,
+      "sha256": "e611cca808b7e3a0df90c3ea509859a19a1aa11d6d05709fe09e8d2609ef22dd"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_027.csv",
+      "rows": 7000,
+      "seed": 983374,
+      "sha256": "b237eeb6298c9b9a16cd52f7399348610e813db8228cd04f4c96a9ae8f76b9c3"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_028.csv",
+      "rows": 7000,
+      "seed": 952671,
+      "sha256": "3cb3b95284aca8cb54057064335e2eca01f12088b3821c4fb081f325ba9f8de2"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_029.csv",
+      "rows": 7000,
+      "seed": 187377,
+      "sha256": "6e65d0093ab8980b3391ef7648dc7643835296dd0ec9a4bc715e9cb1eebf5db3"
+    },
+    {
+      "path": "evaluation/results/raw/full_benchmark/run_030.csv",
+      "rows": 7000,
+      "seed": 991457,
+      "sha256": "0c1663739497378ad8e3abc7cae5be3df3985665156ffcac2a54dbbd0224fcaa"
+    }
+  ],
+  "host_id": "HS-4070",
+  "limitations": [
+    "WSL2 calibration host; native publication-host rerun remains required for final performance claims"
+  ],
+  "operations_per_baseline_per_run": 1000,
+  "platform": "Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.13",
+  "runs": 30,
+  "schema_version": 1,
+  "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+  "started_unix": 1784697586.5942173,
+  "virtualization": "WSL2"
+}

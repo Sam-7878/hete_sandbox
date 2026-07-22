@@ -1,0 +1,14 @@
+property,mode,status,distinct_states
+SAFE-001 UnauthorizedExecution,safety,passed,204
+SAFE-002 NoReplay,safety,passed,204
+SAFE-003 AmountBound,safety,passed,204
+SAFE-004 Conservation,safety,passed,204
+SAFE-005 NoPostExpiryExecution,safety,passed,204
+SAFE-006 RevocationSafety,safety,passed,204
+SAFE-007 DomainBinding,safety,passed,204
+SAFE-008 Atomicity,safety,passed,204
+SAFE-009 AuditCompleteness,safety,passed,204
+SAFE-010 DomainNeutralCore (static companion check),safety,passed,204
+LIVE-001 AuthorizedExecutionProgress,liveness,passed,130
+LIVE-002 ExpirationProgress,liveness,passed,130
+LIVE-003 QuarantineReview,liveness,passed,130

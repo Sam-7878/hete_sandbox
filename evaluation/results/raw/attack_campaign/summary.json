@@ -1,0 +1,16 @@
+{
+  "attack_types": 49,
+  "attempts_per_attack_per_run": 1000,
+  "csv_sha256": "94ddb610e475256593004d7ee7e9243aa253bfb437e48300f3c56cc4d4f2a57d",
+  "defense_asr": 0.0,
+  "defense_brr": 1.0,
+  "defense_relevant_attempts": 1320000,
+  "expected_non_guarantee_attempts": 150000,
+  "far": 0.0,
+  "frr": 0.0,
+  "host_id": "HS-4070",
+  "method_note": "Campaign aggregation is gated by the full Rust workspace test suite; expected non-guarantees are excluded from defense ASR.",
+  "runs": 30,
+  "status": "passed",
+  "valid_control_attempts": 30000
+}

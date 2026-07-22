@@ -1,0 +1,6 @@
+scenario,subjects,same_subject_correlation_rate,unique_pseudonymous_ids
+same_salt,1000,1.0,1000
+rotated_salt,1000,0.0,1000
+different_resource,1000,0.0,1000
+different_warrant,1000,0.0,1000
+different_epoch,1000,0.0,1000

@@ -1,0 +1,16 @@
+metric,value
+artifact_count_scanned,46
+dictionary_attack_success_rate_leaked_salt,1.0
+dictionary_attack_success_rate_low_entropy_no_salt,1.0
+dictionary_attack_success_rate_unknown_random_salt,0.0
+field_count_scanned,5909505
+hits,[]
+host_id,HS-4070
+limitation,This measures artifact exposure and deterministic linkability; it is not a GDPR-compliance certification.
+plaintext_hit_count,0
+reidentification_assumptions,"[""candidate subject list"", ""known derivation scheme"", ""resource and warrant metadata"", ""salt knowledge if stated""]"
+retained_sensitive_field_count,0
+rotated_salt_correlation_rate,0.0
+salt_rotation_reduction_ratio,1.0
+same_salt_correlation_rate,1.0
+status,passed

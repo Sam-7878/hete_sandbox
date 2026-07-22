@@ -1,0 +1,5 @@
+limitation,effect
+performance host,"WSL2 results are calibration, not final native-host claims"
+bounded model,TLC result applies only to configured finite bounds
+asset reach,only policy-aware integrated assets are enforceable
+privacy,stable public metadata can remain linkable

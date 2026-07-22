@@ -1,0 +1,15 @@
+claim_id,claim,status,evidence,restriction
+CLM-001,Warrant domain is independent of voting concepts,SUPPORTED,ARCH-005/010 and Cargo graph,applies to inspected source revision
+CLM-002,SAFE-001--010 hold in the configured TLA+ model,SUPPORTED,formal/results/tlc/publication-safety-20260722,bounded model; not an implementation or unbounded proof
+CLM-003,Configured liveness properties hold under stated weak fairness,SUPPORTED,formal/results/tlc/publication-liveness-20260722,finite bounds and explicit fairness assumptions
+CLM-004,Rust representative traces conform to the formal abstraction,SUPPORTED,formal/traces/conformance-summary.json,11 representative traces; not exhaustive bisimulation
+CLM-005,B0--B6 publication benchmark completed with 30 independent runs,PARTIALLY_SUPPORTED,evaluation/results/raw/full_benchmark,WSL2 calibration; native-host rerun required for final performance claims
+CLM-006,Concurrency/failure harness observed no listed invariant violation,PARTIALLY_SUPPORTED,evaluation/results/raw/concurrency_failure,Python transactional harness; not a linearizability proof of every Adapter implementation
+CLM-007,Defense-relevant threat scenarios had zero accepted outcomes,PARTIALLY_SUPPORTED,evaluation/results/raw/attack_campaign plus workspace tests,test-gated scenario aggregation; repeated rows are not 1.32M independent production invocations
+CLM-008,Scanned publication surfaces exposed no configured plaintext markers,SUPPORTED,evaluation/results/raw/privacy_linkability/privacy_report.json,configured markers and scanned artifacts only
+CLM-009,Salt rotation reduced deterministic same-subject linkability in the experiment,SUPPORTED,evaluation/results/raw/privacy_linkability/linkability_matrix.csv,under documented derivation and attacker assumptions
+CLM-010,An ACID SQLite Adapter implements the unchanged Adapter API,SUPPORTED,adapter-sqlite-asset tests and adapter_comparison.csv,"reference implementation, not certified financial infrastructure"
+CLM-011,A second AI-agent delegation domain reuses core without core modification,SUPPORTED,domain-agent-delegation tests and ARCH-020,two-domain demonstration does not prove universal generality
+CLM-012,The framework is GDPR compliant,NOT_EVALUATED,none,requires legal and deployment-specific assessment
+CLM-013,The framework can control permissionless or non-integrated assets,REJECTED,documented scope boundary,only policy-aware integrated resources are in scope
+CLM-014,The artifact is production-ready legal enforcement infrastructure,NOT_EVALUATED,reference implementation evidence only,"requires governance, certification, operations, and jurisdictional review"

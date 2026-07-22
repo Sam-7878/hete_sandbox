@@ -1,0 +1,3 @@
+adapter_id,atomic_prepare_commit,persistence,median_total_ns
+simulated,true,process_local,17796.0
+sqlite,true,sqlite,38341.0
