@@ -1,0 +1,29 @@
+{
+  "config_sha256": "ce2c6c826b71f3c58589bf20d35825ed3656fc7abb3ab6c451a1a7458710e7e7",
+  "deadlock_found": false,
+  "distinct_states": 204,
+  "elapsed_seconds": 0,
+  "invariant_violations": [],
+  "liveness_violations": [],
+  "mode": "safety",
+  "model_sha256": "f041aa0086a1cc5248af4f6f7b856293d4feb9ff906ca989ae84e0575d635ecd",
+  "property_set": [
+    "SAFE-001 UnauthorizedExecution",
+    "SAFE-002 NoReplay",
+    "SAFE-003 AmountBound",
+    "SAFE-004 Conservation",
+    "SAFE-005 NoPostExpiryExecution",
+    "SAFE-006 RevocationSafety",
+    "SAFE-007 DomainBinding",
+    "SAFE-008 Atomicity",
+    "SAFE-009 AuditCompleteness",
+    "SAFE-010 DomainNeutralCore (static companion check)"
+  ],
+  "run_id": "publication-safety-20260722",
+  "state_depth": 11,
+  "states_generated": 490,
+  "status": "passed",
+  "tlc_exit_code": 0,
+  "virtualization": "WSL2",
+  "workers": 2
+}

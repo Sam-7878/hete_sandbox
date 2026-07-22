@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 from pathlib import Path
@@ -19,6 +20,8 @@ NEW_PACKAGES = {
     "domain-electronic-warrant",
     "adapter-simulated-asset",
     "hete-warrant-verifier",
+    "adapter-sqlite-asset",
+    "domain-agent-delegation",
 }
 
 
@@ -100,6 +103,46 @@ def main() -> None:
     exposed = [str(path.relative_to(workspace)) for path in result_files if any(value in path.read_text(encoding="utf-8", errors="ignore") for value in forbidden)]
     require(not exposed, "ARCH-015", f"forbidden plaintext in outputs: {exposed}")
     passed.append("ARCH-015")
+
+    publication_runner = (workspace / "evaluation/generate_publication_manifest.py").read_text(encoding="utf-8")
+    require("--untracked-files=no" in publication_runner and "requires a clean" in publication_runner,
+            "ARCH-016", "publication runner lacks clean-tree gate")
+    passed.append("ARCH-016")
+    benchmark_manifest = workspace / "evaluation/results/raw/full_benchmark/benchmark_manifest.json"
+    require(benchmark_manifest.exists(), "ARCH-017", "full benchmark manifest missing")
+    benchmark_data = json.loads(benchmark_manifest.read_text(encoding="utf-8"))
+    require(bool(benchmark_data.get("source_commit")) and bool(benchmark_data.get("host_id")),
+            "ARCH-017", "benchmark provenance missing")
+    passed.append("ARCH-017")
+    require((workspace / "evaluation/analysis/verify_raw_hashes.py").exists()
+            and (workspace / "evaluation/results/raw/SHA256SUMS.json").exists(),
+            "ARCH-018", "raw immutability inventory missing")
+    passed.append("ARCH-018")
+    sqlite_dependencies = set(graph["adapter-sqlite-asset"])
+    forbidden_adapter_dependencies = {"poa-core", "domain-electronic-warrant", "domain-agent-delegation", "hete-credential"}
+    require("hete-adapter-api" in sqlite_dependencies and not (sqlite_dependencies & forbidden_adapter_dependencies),
+            "ARCH-019", "external adapter crosses the API/domain boundary")
+    passed.append("ARCH-019")
+    core_paths = sorted(path for path in (workspace / "crates/poa-core").rglob("*") if path.is_file())
+    core_lines = "".join(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.relative_to(workspace).as_posix()}\n" for path in core_paths)
+    core_hash = hashlib.sha256(core_lines.encode()).hexdigest()
+    expected_core_hash = (workspace / "evaluation/baselines/poa_core.sha256").read_text().strip()
+    require(core_hash == expected_core_hash, "ARCH-020", "poa-core changed during second-domain addition")
+    passed.append("ARCH-020")
+    require(benchmark_data.get("build_profile") == "release", "ARCH-021", "publication benchmark is not release")
+    passed.append("ARCH-021")
+    require(all((workspace / f"formal/results/tlc/publication-{mode}-20260722/summary.json").exists()
+                for mode in ("safety", "liveness")), "ARCH-022", "TLC evidence missing")
+    passed.append("ARCH-022")
+    require("virtualization" in benchmark_data and benchmark_data["virtualization"] in {"WSL2", "native-or-undetected"},
+            "ARCH-023", "virtualization provenance missing")
+    passed.append("ARCH-023")
+    figure_manifest = workspace / "evaluation/results/figures/figures_manifest.json"
+    require(figure_manifest.exists() and "raw_hash_inventory_sha256" in json.loads(figure_manifest.read_text()),
+            "ARCH-024", "figures are not hash-linked to raw data")
+    passed.append("ARCH-024")
+    require((workspace / "evaluation/scan_artifact_secrets.py").exists(), "ARCH-025", "artifact secret scanner missing")
+    passed.append("ARCH-025")
 
     print(json.dumps({"status": "passed", "tests": passed, "graph": graph}, sort_keys=True))
 

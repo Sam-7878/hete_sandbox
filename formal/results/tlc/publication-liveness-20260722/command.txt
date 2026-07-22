@@ -1,0 +1,1 @@
+java -XX:+UseParallelGC -cp formal/tools/tla2tools.jar tlc2.TLC -seed 20260722 -fp 0 -workers 2 -metadir formal/results/tlc/publication-liveness-20260722/metadir -config ElectronicWarrantLiveness.cfg ElectronicWarrant.tla

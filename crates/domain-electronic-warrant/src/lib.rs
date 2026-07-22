@@ -148,6 +148,28 @@ pub enum WarrantState {
     Failed,
 }
 
+/// Executable-state projection used to compare Rust traces with the TLA+ model.
+///
+/// Field names intentionally match `formal/tla/ElectronicWarrant.tla`.  This
+/// type is evidence plumbing, not a second lifecycle implementation.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct FormalTraceState {
+    pub warrant_state: String,
+    pub credentials_verified: bool,
+    pub authorized: bool,
+    pub domain_valid: bool,
+    pub nonce_used: bool,
+    pub activation_count: u8,
+    pub reserved: u128,
+    pub executed: u128,
+    pub released: u128,
+    pub now: Timestamp,
+    pub adapter_committed: bool,
+    pub audit_written: bool,
+    pub last_action: String,
+}
+
 impl WarrantState {
     pub fn is_terminal(self) -> bool {
         matches!(
@@ -342,6 +364,47 @@ pub struct WarrantRecord {
 }
 
 impl WarrantRecord {
+    /// Project the authoritative Rust record onto the variables checked by TLC.
+    pub fn formal_trace_state(
+        &self,
+        now: Timestamp,
+        audit_written: bool,
+        last_action: impl Into<String>,
+    ) -> FormalTraceState {
+        let position = self.position.as_ref();
+        let credentials_verified = !matches!(
+            self.state,
+            WarrantState::Draft | WarrantState::Submitted | WarrantState::Rejected
+        );
+        let authorized = matches!(
+            self.state,
+            WarrantState::Authorized
+                | WarrantState::Scheduled
+                | WarrantState::Active
+                | WarrantState::PartiallyExecuted
+                | WarrantState::FullyExecuted
+                | WarrantState::Suspended
+                | WarrantState::Revoked
+                | WarrantState::Expired
+                | WarrantState::Released
+        );
+        FormalTraceState {
+            warrant_state: format!("{:?}", self.state),
+            credentials_verified,
+            authorized,
+            domain_valid: true,
+            nonce_used: authorized,
+            activation_count: u8::from(position.is_some()),
+            reserved: position.map_or(0, |value| value.reserved_amount),
+            executed: position.map_or(0, |value| value.executed_amount),
+            released: position.map_or(0, |value| value.released_amount),
+            now,
+            adapter_committed: position.is_some(),
+            audit_written,
+            last_action: last_action.into(),
+        }
+    }
+
     /// Apply a lifecycle transition after the corresponding authorized adapter
     /// operation has succeeded. Invalid or terminal-state resurrection fails closed.
     pub fn transition(&mut self, next: WarrantState) -> Result<(), WarrantError> {

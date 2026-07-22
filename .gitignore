@@ -34,11 +34,19 @@ build/
 debug/
 release/
 target/
+formal/tools/*.jar
 
 # docs/architecture/
 docs/work_reports/*
 !docs/work_reports/104_electronic_warrant/
 !docs/work_reports/104_electronic_warrant/*.md
+!docs/work_reports/105_electronic_warrant_addional_dev/
+!docs/work_reports/105_electronic_warrant_addional_dev/*.md
+!docs/work_reports/105_electronic_warrant_addional_dev/*.txt
+
+# Generated after the tagged clean-tree baseline; retained locally/artifacted.
+evaluation/results/manifests/publication_baseline.json
+artifacts/paper-v1/
 
 # data/
 wasm/
