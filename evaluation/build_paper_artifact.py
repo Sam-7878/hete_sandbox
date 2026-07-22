@@ -17,7 +17,9 @@ TEXT_SUFFIXES={".md",".txt",".log",".json",".jsonl",".csv",".py",".rs",".toml","
 def copy_tree(source: Path,destination: Path) -> None:
     if not source.exists():return
     for path in source.rglob("*"):
-        if not path.is_file() or path.name=="tla2tools.jar":continue
+        if (not path.is_file() or path.name=="tla2tools.jar"
+                or "__pycache__" in path.parts or path.suffix==".pyc"):
+            continue
         target=destination/path.relative_to(source);target.parent.mkdir(parents=True,exist_ok=True)
         if path.suffix.lower() in TEXT_SUFFIXES or path.name in {"Cargo.lock","Cargo.toml"}:
             text=path.read_text(encoding="utf-8",errors="strict")
