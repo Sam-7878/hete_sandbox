@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/"artifacts/paper-v1"
-TEXT_SUFFIXES={".md",".txt",".json",".jsonl",".csv",".py",".rs",".toml",".tla",".cfg",".sh",".yml",".yaml"}
+TEXT_SUFFIXES={".md",".txt",".log",".json",".jsonl",".csv",".py",".rs",".toml",".tla",".cfg",".sh",".yml",".yaml"}
 
 
 def copy_tree(source: Path,destination: Path) -> None:
