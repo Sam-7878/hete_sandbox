@@ -1,0 +1,315 @@
+{
+  "schema_version": 2,
+  "measured_source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+  "reporting_commit": "12c9c8f9fa116809841eff01daa9aaf5fdede358",
+  "artifact_tag": "v0.2.0-paper-rc1",
+  "cargo_lock_sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+  "datasets": [
+    {
+      "dataset_id": "full_benchmark",
+      "file_count": 31,
+      "row_count": 210000,
+      "manifest_path": "evaluation/results/raw/full_benchmark/benchmark_manifest.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "concurrency_failure",
+      "file_count": 2,
+      "row_count": 360,
+      "manifest_path": "evaluation/results/raw/concurrency_failure/manifest.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "attack_campaign",
+      "file_count": 2,
+      "row_count": 1470,
+      "manifest_path": "evaluation/results/raw/attack_campaign/summary.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "privacy_linkability",
+      "file_count": 3,
+      "row_count": 46,
+      "manifest_path": "evaluation/results/raw/privacy_linkability/privacy_report.json",
+      "status": "VERIFIED"
+    },
+    {
+      "dataset_id": "external_adapter",
+      "file_count": 1,
+      "row_count": 60000,
+      "manifest_path": "evaluation/results/raw/adapter_comparison.csv",
+      "status": "VERIFIED"
+    }
+  ],
+  "formal_runs": [
+    {
+      "run_id": "publication-safety-20260722",
+      "type": "safety",
+      "result_path": "formal/results/tlc/publication-safety-20260722/",
+      "status": "VERIFIED"
+    },
+    {
+      "run_id": "publication-liveness-20260722",
+      "type": "liveness",
+      "result_path": "formal/results/tlc/publication-liveness-20260722/",
+      "status": "VERIFIED"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-001",
+      "status": "VERIFIED",
+      "scope": "Microbenchmark B0 Baseline Latency",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/full_benchmark/run_001.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/summary_table.csv",
+        "evaluation/results/processed/stage_contribution_analysis_v2.csv"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/aggregate_results.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "independent_run_mean",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "WSL2 calibration environment",
+      "recommended_wording": "Mean latency under B0 baseline is 94,014 ns (94.01 \u03bcs).",
+      "prohibited_wording": "Zero latency overhead guaranteed",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-002",
+      "status": "VERIFIED",
+      "scope": "Microbenchmark B5 Full HETE Pipeline Latency",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/full_benchmark/run_001.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/summary_table.csv",
+        "evaluation/results/processed/stage_contribution_analysis_v2.csv"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/aggregate_results.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "independent_run_mean",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "WSL2 calibration environment",
+      "recommended_wording": "Full pipeline B5 mean latency is 203,894 ns (203.89 \u03bcs), showing an overhead of +109.88 \u03bcs over B0.",
+      "prohibited_wording": "Negligible runtime cost",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-003",
+      "status": "VERIFIED",
+      "scope": "Stage Contribution Dominance of Credential Verification",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/full_benchmark/run_001.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/stage_contribution_analysis_v2.csv"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/generate_tables.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "operation_stage_latency",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Synthetic credential signature verification in benchmark harness",
+      "recommended_wording": "Credential verification stage accounts for 69.05% of mean processing time and 98.42% of latency variance.",
+      "prohibited_wording": "100% stage variance explained without orchestration overhead",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-004",
+      "status": "VERIFIED",
+      "scope": "Formal Model Safety Specification Verification",
+      "raw_evidence_paths": [
+        "formal/results/tlc/publication-safety-20260722/summary.json"
+      ],
+      "processed_evidence_paths": [
+        "formal/results/tlc/TLC_INDEPENDENT_AUDIT.md"
+      ],
+      "formal_evidence_paths": [
+        "formal/tla/HeteWarrantProtocol.tla",
+        "formal/tla/HeteWarrantProtocol.cfg"
+      ],
+      "analysis_script_paths": [],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "tlc_state_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Bounded state-space exploration (Depth 11, 490 states generated)",
+      "recommended_wording": "TLC model checker explored 490 states (204 distinct) with 0 safety invariant violations.",
+      "prohibited_wording": "Unbounded mathematical proof of bug-free implementation",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-005",
+      "status": "VERIFIED",
+      "scope": "Formal Model Liveness Specification Verification",
+      "raw_evidence_paths": [
+        "formal/results/tlc/publication-liveness-20260722/summary.json"
+      ],
+      "processed_evidence_paths": [
+        "formal/results/tlc/TLC_INDEPENDENT_AUDIT.md"
+      ],
+      "formal_evidence_paths": [
+        "formal/tla/HeteWarrantProtocol.tla"
+      ],
+      "analysis_script_paths": [],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "tlc_state_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Weak fairness assumption on state transitions",
+      "recommended_wording": "TLC model checker explored 294 states (130 distinct) with 0 liveness property violations or deadlocks.",
+      "prohibited_wording": "Guaranteed absence of real-world deadlock in OS kernel thread scheduling",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-006",
+      "status": "VERIFIED",
+      "scope": "Trace Conformance Rate",
+      "raw_evidence_paths": [
+        "formal/results/traces/normal_execution_traces.json"
+      ],
+      "processed_evidence_paths": [
+        "formal/results/traces/conformance_summary.json"
+      ],
+      "formal_evidence_paths": [
+        "formal/tla/HeteWarrantProtocol.tla"
+      ],
+      "analysis_script_paths": [
+        "evaluation/analysis/verify_raw_hashes.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "trace_snapshot_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Evaluated over 11 representative normal traces and 6 mutated negative traces",
+      "recommended_wording": "All evaluated representative traces conformed to the checked abstraction (100% acceptance, 100% rejection of invalid traces).",
+      "prohibited_wording": "Complete formal equivalence of implementation and spec",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-007",
+      "status": "VERIFIED",
+      "scope": "Concurrency & Invariant Stress Campaign",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/concurrency_failure/campaign.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/concurrency_summary.json"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/aggregate_results.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "harness_condition_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Transactional harness simulation mapping EnforcementAdapter contract",
+      "recommended_wording": "Across 360 concurrency conditions and 360,000 operations, 0 invariant violations occurred.",
+      "prohibited_wording": "Universal linearizability proof across arbitrary DB engines",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-008",
+      "status": "VERIFIED",
+      "scope": "Security Attack Campaign Defense",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/attack_campaign/attack_results.csv",
+        "evaluation/results/raw/attack_campaign/summary.json"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/attack_summary_table.csv"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/aggregate_results.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "classified_attempt_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Test-gated scenario repetitions over 49 attack types",
+      "recommended_wording": "1.32 million test-gated scenario repetitions across 49 attack types were recorded and verified with 0 defense failures (ASR = 0.00). These were not independent production-service attack invocations.",
+      "prohibited_wording": "1.32 million real attacks were blocked; zero attack risk",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-009",
+      "status": "VERIFIED",
+      "scope": "Privacy & Linkability Audit",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/privacy_linkability/privacy_report.json"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/privacy_audit_summary.json"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/statistical_tests.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "field_scanner_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Static field scanner looking for configured plaintext/encoded identity markers",
+      "recommended_wording": "5,910,000 field occurrences were scanned across 46 artifacts with 0 unhashed identity leaks detected and 100% negative-control detection rate.",
+      "prohibited_wording": "GDPR compliance certification",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-010",
+      "status": "VERIFIED",
+      "scope": "SQLite Asset Adapter Performance",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/adapter_comparison.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/adapter_summary.csv"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/aggregate_results.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "independent_run_mean",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Single-node SQLite WAL mode persistence",
+      "recommended_wording": "SQLite WAL adapter achieved 42,061 ns (42.06 \u03bcs) mean operation latency across 30 runs.",
+      "prohibited_wording": "Distributed consensus latency equivalence",
+      "verification_status": "VERIFIED"
+    },
+    {
+      "claim_id": "CLM-011",
+      "status": "VERIFIED",
+      "scope": "Domain Generalizability to AI Agent Task Execution",
+      "raw_evidence_paths": [
+        "evaluation/results/raw/domain_generalization/agent_task_results.csv"
+      ],
+      "processed_evidence_paths": [
+        "evaluation/results/processed/generalization_summary.json"
+      ],
+      "formal_evidence_paths": [],
+      "analysis_script_paths": [
+        "evaluation/analysis/statistical_tests.py"
+      ],
+      "sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+      "sampling_unit": "domain_execution_count",
+      "source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+      "limitations": "Evaluated on 9 domain adapter files using shared kernel interfaces",
+      "recommended_wording": "Reused 100% of core protocol kernel interfaces across the second domain without core source modifications.",
+      "prohibited_wording": "Universal zero-code adapter for all possible enterprise domains",
+      "verification_status": "VERIFIED"
+    }
+  ],
+  "known_limitations": [
+    "WSL2 calibration host requires native Ubuntu rerun for final deployment claims",
+    "TLC is bounded model checking on finite configuration; not an unbounded proof",
+    "Attack campaign uses test-gated scenario repetitions (1.32M attempts over 99 Rust test suites)",
+    "Privacy audit verifies absence of configured plaintext/encoded markers; not GDPR certification"
+  ],
+  "native_validation_status": "PUBLICATION_EVIDENCE_READY_WITH_LIMITATIONS"
+}

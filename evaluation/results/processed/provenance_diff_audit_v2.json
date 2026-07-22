@@ -1,0 +1,21 @@
+{
+  "measured_source_commit": "7d8ecad3f3cdb86d86ed8711b3c02e31b021904c",
+  "reporting_commit": "12c9c8f9fa116809841eff01daa9aaf5fdede358",
+  "artifact_tag": "v0.2.0-paper-rc1",
+  "measured_cargo_lock_sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+  "reporting_cargo_lock_sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+  "artifact_cargo_lock_sha256": "9856174a3ede977f272a16e037005c7509f4d6e6630961d654be0bba519397dc",
+  "all_equal": true,
+  "corrected_erroneous_hash": "6c71ca4d6e902f5a62f589db2d58079540b6164be65ca107ef4fbe1b3a32ec69",
+  "code_diff_affecting_measurement": false,
+  "audit_decision": "VERIFIED_NO_EXECUTION_DIFF",
+  "diff_classification_summary": {
+    "execution_logic": 0,
+    "benchmark_logic": 0,
+    "analysis_logic": 4,
+    "documentation_only": 15,
+    "generated_evidence": 32,
+    "configuration": 1
+  },
+  "justification": "All commit changes between 7d8ecad and 12c9c8f were documentation, report text, and analysis script additions. No binary execution, core kernel, protocol model, or sandbox logic files were modified. Cargo.lock SHA-256 is exactly identical across measured source commit, reporting commit, and artifact package."
+}
