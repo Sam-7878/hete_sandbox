@@ -15,6 +15,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 
+pub mod adversarial;
+pub mod fault_injection;
+pub mod mode;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RequestContext {
@@ -315,15 +319,15 @@ impl AacoHooks<String, String, RequestContext, String> for PaymentHooks<'_> {
         &mut self,
         descriptor: &TransitionDescriptor<String, String, RequestContext, String>,
     ) -> Result<Self::Candidate, AbortReason> {
-        if self.request.payload.inject_internal_error {
-            return Err(AbortReason::InternalFailure(
-                "injected storage failure".into(),
-            ));
-        }
         Ok((descriptor.asset.clone(), self.request.payload.amount))
     }
 
     fn reconcile(&mut self, candidate: Self::Candidate) -> Result<(), AbortReason> {
+        if self.request.payload.inject_internal_error {
+            return Err(AbortReason::InternalFailure(
+                "injected failure after candidate creation and before commit".into(),
+            ));
+        }
         self.state.committed_assets.insert(candidate.0, candidate.1);
         Ok(())
     }
