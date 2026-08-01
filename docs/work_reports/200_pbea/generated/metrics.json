@@ -1,0 +1,203 @@
+{
+  "access-only": {
+    "latency_us": {
+      "count": 270,
+      "max": 97958,
+      "mean": 11992.122222222222,
+      "min": 9436,
+      "p50": 10195,
+      "p95": 24207,
+      "population_stddev": 7231.592414401181
+    },
+    "metrics": {
+      "BRSR": {
+        "denominator": 30,
+        "metric": "BRSR",
+        "numerator": 30,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.8864866068260312
+      },
+      "CER": {
+        "denominator": 90,
+        "metric": "CER",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.04093562556432678,
+        "wilson_95_low": 0.0
+      },
+      "FCR": {
+        "denominator": 30,
+        "metric": "FCR",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.11351339317396876,
+        "wilson_95_low": 0.0
+      },
+      "MESR": {
+        "denominator": 180,
+        "metric": "MESR",
+        "numerator": 180,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9791045020783868
+      },
+      "OCA": {
+        "denominator": 270,
+        "metric": "OCA",
+        "numerator": 270,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9859719604283536
+      },
+      "SIVR": {
+        "denominator": 0,
+        "metric": "SIVR",
+        "numerator": 0,
+        "percent": null,
+        "rate": null,
+        "wilson_95_high": null,
+        "wilson_95_low": null
+      }
+    }
+  },
+  "full-pbea": {
+    "latency_us": {
+      "count": 270,
+      "max": 402531,
+      "mean": 32904.17037037037,
+      "min": 9536,
+      "p50": 10549,
+      "p95": 187731,
+      "population_stddev": 67488.67979419635
+    },
+    "metrics": {
+      "BRSR": {
+        "denominator": 30,
+        "metric": "BRSR",
+        "numerator": 30,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.8864866068260312
+      },
+      "CER": {
+        "denominator": 90,
+        "metric": "CER",
+        "numerator": 90,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9590643744356734
+      },
+      "FCR": {
+        "denominator": 30,
+        "metric": "FCR",
+        "numerator": 30,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.8864866068260312
+      },
+      "MESR": {
+        "denominator": 180,
+        "metric": "MESR",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.02089549792161305,
+        "wilson_95_low": 0.0
+      },
+      "OCA": {
+        "denominator": 270,
+        "metric": "OCA",
+        "numerator": 270,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9859719604283536
+      },
+      "SIVR": {
+        "denominator": 240,
+        "metric": "SIVR",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.015753919941558815,
+        "wilson_95_low": 0.0
+      }
+    }
+  },
+  "transition-only": {
+    "latency_us": {
+      "count": 270,
+      "max": 24569,
+      "mean": 11068.255555555555,
+      "min": 9304,
+      "p50": 10415,
+      "p95": 15596,
+      "population_stddev": 2016.0485070651218
+    },
+    "metrics": {
+      "BRSR": {
+        "denominator": 30,
+        "metric": "BRSR",
+        "numerator": 30,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 0.9999999999999999,
+        "wilson_95_low": 0.8864866068260312
+      },
+      "CER": {
+        "denominator": 90,
+        "metric": "CER",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.04093562556432678,
+        "wilson_95_low": 0.0
+      },
+      "FCR": {
+        "denominator": 30,
+        "metric": "FCR",
+        "numerator": 15,
+        "percent": 50.0,
+        "rate": 0.5,
+        "wilson_95_high": 0.6684587435946623,
+        "wilson_95_low": 0.33154125640533766
+      },
+      "MESR": {
+        "denominator": 180,
+        "metric": "MESR",
+        "numerator": 90,
+        "percent": 50.0,
+        "rate": 0.5,
+        "wilson_95_high": 0.5722763756728522,
+        "wilson_95_low": 0.4277236243271478
+      },
+      "OCA": {
+        "denominator": 270,
+        "metric": "OCA",
+        "numerator": 270,
+        "percent": 100.0,
+        "rate": 1.0,
+        "wilson_95_high": 1.0,
+        "wilson_95_low": 0.9859719604283536
+      },
+      "SIVR": {
+        "denominator": 135,
+        "metric": "SIVR",
+        "numerator": 0,
+        "percent": 0.0,
+        "rate": 0.0,
+        "wilson_95_high": 0.02766795201752491,
+        "wilson_95_low": 0.0
+      }
+    }
+  }
+}

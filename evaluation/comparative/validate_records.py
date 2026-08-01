@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Fail-closed semantic validator for PBEA comparison evidence."""
 import argparse, collections, json, pathlib, sys
+import jsonschema
 
 MODES = ("access-only", "transition-only", "full-pbea")
 SCENARIOS = tuple(f"S{i}" for i in range(9))
+SCHEMA = json.loads((pathlib.Path(__file__).parent / "evidence.schema.json").read_text())
+SCHEMA_VALIDATOR = jsonschema.Draft202012Validator(SCHEMA)
 
 def expected(mode, scenario, iteration):
     if scenario == "S0": return "success" if mode == "access-only" else "commit"
@@ -27,8 +30,12 @@ def validate(records, require_complete=True):
     errors=[]; ids=set(); cells=collections.Counter(); commits=set(); platforms=set()
     required={"run_id","experiment_id","scenario_id","mode","iteration","seed","timestamp","source_commit","platform","build_profile","policy_digest","actor_authenticated","access_authorized","operation","expected_outcome","observed_outcome","malicious_effect_attempted","malicious_effect_succeeded","state_hash_before","state_hash_after","state_changed","capability_type","target","os_errno","exit_code","signal","listener_opened","business_loop_entered","duration_us","status","details"}
     for i,r in enumerate(records,1):
+        schema_errors=sorted(SCHEMA_VALIDATOR.iter_errors(r),key=lambda e:list(e.absolute_path))
+        if schema_errors: errors.append(f"record {i}: schema: {schema_errors[0].message}")
         missing=required-r.keys()
         if missing: errors.append(f"record {i}: missing {sorted(missing)}"); continue
+        extra=r.keys()-required
+        if extra: errors.append(f"record {i}: unknown fields {sorted(extra)}")
         if r["run_id"] in ids: errors.append(f"record {i}: duplicate run_id")
         ids.add(r["run_id"]); commits.add(r["source_commit"]); platforms.add(r["platform"])
         key=(r["mode"],r["scenario_id"],r["iteration"]); cells[key]+=1

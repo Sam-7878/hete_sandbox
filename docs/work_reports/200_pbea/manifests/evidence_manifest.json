@@ -1,0 +1,18 @@
+{
+  "experiment_id": "PBEA-COMPARATIVE-001",
+  "source_commit": "1bcfa8b",
+  "record_count": 810,
+  "records_per_mode": 270,
+  "iterations_per_mode_scenario": 30,
+  "sha256": {
+    "raw/access-only.jsonl": "4af2a9c67c2bd2e324f34cca1310dc755274576b7b329f4e8aec81d8ba438dd4",
+    "raw/transition-only.jsonl": "423caa2ad9f877363d993d3f347fc8ba05686438bedb4ac1b4550ae73b6f7fc3",
+    "raw/full-pbea.jsonl": "4b0d05d832c660bf431305abec55bbd73153cd4c5a36511d4f346fb36303e75d",
+    "generated/metrics.json": "2b272b3f08915497abf55fae659d593bfa494475497c2b54417e92b56935c465",
+    "policy": "08896e390d69f762be1e62d70b1eaf56de19a60cc01c88b8766a9ea894a5f5cd",
+    "policy_schema": "c51aa3c84d2ded586f6eaa4f17643feea518b63c78e90377c9ba8f8534a161d2",
+    "request_schema": "d734db15f306c15b709251297f4f21649dfc8d9735af879bc175d5af28ef7f73",
+    "scenario_manifest": "d79620362edf7c8cde2d8c1e83f933a02011d6b68d2312feabb36d04a3a11803"
+  },
+  "validation": "passed"
+}

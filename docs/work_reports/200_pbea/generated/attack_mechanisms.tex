@@ -1,0 +1,12 @@
+\begin{tabular}{lll}
+\toprule
+Scenario & Full-PBEA control & Evidence \\
++\midrule
+S1/S6/S8 & Transition policy & Reject/quarantine and state hash \\
++S2 & OpenBSD unveil & Read denied with OS errno \\
++S3 & OpenBSD pledge & Child termination signal \\
++S4 & Application endpoint allowlist & Blocked before connect \\
++S5 & Fail-closed startup & Business loop not entered \\
++S7 & Candidate/commit separation & Abort and unchanged state hash \\
++\bottomrule
+\end{tabular}
