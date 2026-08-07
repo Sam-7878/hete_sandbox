@@ -181,6 +181,43 @@ def main() -> None:
             "ARCH-UIR-010", "domain entity literal in UIR core model")
     passed.append("ARCH-UIR-010")
 
+    lexicon_text = (workspace / "crates/poa-uir/src/frontend/lexicon.rs").read_text(encoding="utf-8").lower()
+    require("trait semanticlexicon" in lexicon_text
+            and not any(token in lexicon_text for token in ("acme", "samsung", "microsoft", "apple inc")),
+            "ARCH-UIR-GEN-001", "SemanticLexicon contains an entity instance or is missing")
+    passed.append("ARCH-UIR-GEN-001")
+    resolution_text = (workspace / "crates/poa-uir/src/resolution.rs").read_text(encoding="utf-8")
+    require("NeedsClarification" in resolution_text and "Executor" not in resolution_text
+            and "needs_clarification_never_produces_executable_uir" in tests_text,
+            "ARCH-UIR-GEN-002", "NeedsClarification is coupled to execution")
+    passed.append("ARCH-UIR-GEN-002")
+    require("FilterAndRender" in output_text and "render_supported_claims(&claims)" in output_text
+            and "filter_and_render_never_emits_unsupported_model_text" in tests_text,
+            "ARCH-UIR-GEN-003", "FILTER_AND_RENDER lacks supported-only enforcement")
+    passed.append("ARCH-UIR-GEN-003")
+    require("source_digest" in output_text and "exact_value" in output_text
+            and "verified_numeric_slot_binding_preserves_exact_text_provenance_and_digest" in tests_text,
+            "ARCH-UIR-GEN-004", "verified numeric binding lacks value/digest invariant")
+    passed.append("ARCH-UIR-GEN-004")
+    phase3_manifest_path = workspace / "results/uir_phase3/frozen_v2_manifest.json"
+    require(phase3_manifest_path.exists(), "ARCH-UIR-GEN-005", "v2 candidate manifest missing")
+    phase3_manifest = json.loads(phase3_manifest_path.read_text(encoding="utf-8"))
+    digest = hashlib.sha256()
+    parser_paths = [*sorted((workspace / "crates/poa-uir/src/frontend").glob("*.rs")),
+                    workspace / "crates/poa-uir/src/resolution.rs",
+                    workspace / "crates/poa-uir/src/output_contract.rs"]
+    for path in parser_paths:
+        digest.update(path.relative_to(workspace).as_posix().encode())
+        digest.update(path.read_bytes())
+    require(digest.hexdigest() == phase3_manifest.get("parser_source_sha256"),
+            "ARCH-UIR-GEN-005", "parser source changed after v2 candidate generation")
+    passed.append("ARCH-UIR-GEN-005")
+    publisher = (workspace / "evaluation/uir_generalization/generate_phase3_report.py").read_text(encoding="utf-8")
+    require("--publication-ready" in publisher and "human_review_status" in publisher
+            and "ARCH-UIR-GEN-006 BLOCKED" in publisher,
+            "ARCH-UIR-GEN-006", "publication-ready report lacks human-review gate")
+    passed.append("ARCH-UIR-GEN-006")
+
     print(json.dumps({"status": "passed", "tests": passed, "graph": graph}, sort_keys=True))
 
 

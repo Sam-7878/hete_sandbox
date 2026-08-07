@@ -46,6 +46,109 @@ pub struct OutputValidation {
     pub violations: Vec<String>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct EnforcedOutput {
+    pub accepted: bool,
+    pub complete_rejection: bool,
+    pub text: String,
+    pub claims: Vec<GeneratedClaim>,
+    pub validation: OutputValidation,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct VerifiedNumericSlot {
+    pub key: String,
+    /// Kept as source text: no floating-point conversion or model regeneration.
+    pub exact_value: String,
+    pub provenance: String,
+    pub source_digest: String,
+}
+
+pub fn bind_verified_numeric_slots(slots: &[VerifiedNumericSlot]) -> GeneratedOutput {
+    let claims = slots
+        .iter()
+        .map(|slot| GeneratedClaim {
+            claim_type: "numeric_fact".into(),
+            key: slot.key.clone(),
+            value: slot.exact_value.clone(),
+            provenance: Some(format!("{}#sha256:{}", slot.provenance, slot.source_digest)),
+        })
+        .collect::<Vec<_>>();
+    GeneratedOutput {
+        text: render_supported_claims(&claims),
+        claims,
+    }
+}
+
+fn supported_claims(facts: &VerifiedFactSet, output: &GeneratedOutput) -> Vec<GeneratedClaim> {
+    output
+        .claims
+        .iter()
+        .filter(|claim| {
+            facts.0.iter().any(|fact| {
+                fact.claim_type == claim.claim_type
+                    && fact.key == claim.key
+                    && fact.value == claim.value
+                    && claim.provenance.as_deref() == Some(fact.provenance.as_str())
+            })
+        })
+        .cloned()
+        .collect()
+}
+
+fn render_supported_claims(claims: &[GeneratedClaim]) -> String {
+    claims
+        .iter()
+        .map(|claim| {
+            format!(
+                "{}={} [{}]",
+                claim.key,
+                claim.value,
+                claim.provenance.as_deref().unwrap_or("verified")
+            )
+        })
+        .collect::<Vec<_>>()
+        .join("; ")
+}
+
+/// Enforces the output contract after generation. FILTER_AND_RENDER discards the
+/// model prose and deterministically renders only claims matched to verified facts.
+pub fn enforce_output_contract(
+    uir: &ValidatedUir,
+    facts: &VerifiedFactSet,
+    output: &GeneratedOutput,
+) -> EnforcedOutput {
+    let validation = validate_output(uir, facts, output);
+    let supported = supported_claims(facts, output);
+    let behavior = &uir.as_uir().output_contract.unsupported_claim_behavior;
+    let complete_rejection = !validation.accepted
+        || (matches!(behavior, UnsupportedClaimBehavior::FilterAndRender) && supported.is_empty());
+    let claims = match behavior {
+        UnsupportedClaimBehavior::Reject if validation.unsupported_claim_count > 0 => Vec::new(),
+        UnsupportedClaimBehavior::Remove | UnsupportedClaimBehavior::FilterAndRender => supported,
+        UnsupportedClaimBehavior::Reject | UnsupportedClaimBehavior::Flag => output.claims.clone(),
+    };
+    let text = if complete_rejection {
+        "NO_VERIFIED_ANSWER".into()
+    } else if matches!(
+        behavior,
+        UnsupportedClaimBehavior::Remove | UnsupportedClaimBehavior::FilterAndRender
+    ) {
+        render_supported_claims(&claims)
+    } else {
+        output.text.clone()
+    };
+    EnforcedOutput {
+        accepted: !complete_rejection,
+        complete_rejection,
+        text,
+        claims,
+        validation,
+    }
+}
+
 pub fn validate_output(
     uir: &ValidatedUir,
     facts: &VerifiedFactSet,
@@ -91,9 +194,11 @@ pub fn validate_output(
     }
     let unsupported = output.claims.len().saturating_sub(supported);
     let accepted = unsupported == 0
-        || !matches!(
+        || matches!(
             contract.unsupported_claim_behavior,
-            UnsupportedClaimBehavior::Reject
+            UnsupportedClaimBehavior::Remove
+                | UnsupportedClaimBehavior::Flag
+                | UnsupportedClaimBehavior::FilterAndRender
         );
     OutputValidation {
         accepted,

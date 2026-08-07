@@ -154,6 +154,42 @@ fn output_contract_rejects_unsupported_claim() {
 }
 
 #[test]
+fn filter_and_render_never_emits_unsupported_model_text() {
+    let (mut uir, _) = pair();
+    uir.output_contract.unsupported_claim_behavior = UnsupportedClaimBehavior::FilterAndRender;
+    let validated = validate(uir).unwrap();
+    let facts = FixtureExecutor.execute(&validated).unwrap();
+    let mut renderer = MockRenderer::new(true);
+    let output = renderer.render(&validated, &facts).unwrap();
+    let enforced = enforce_output_contract(&validated, &facts, &output);
+    assert!(enforced.accepted);
+    assert!(!enforced.text.contains("999"));
+    assert!(
+        !enforced
+            .claims
+            .iter()
+            .any(|claim| claim.key == "unsupported")
+    );
+    assert_eq!(enforced.validation.unsupported_claim_count, 1);
+}
+
+#[test]
+fn verified_numeric_slot_binding_preserves_exact_text_provenance_and_digest() {
+    let output = bind_verified_numeric_slots(&[VerifiedNumericSlot {
+        key: "revenue_2025".into(),
+        exact_value: "9007199254740993.00".into(),
+        provenance: "fixture://acme/2025".into(),
+        source_digest: "abc123".into(),
+    }]);
+    assert_eq!(output.claims[0].value, "9007199254740993.00");
+    assert_eq!(
+        output.claims[0].provenance.as_deref(),
+        Some("fixture://acme/2025#sha256:abc123")
+    );
+    assert!(output.text.contains("9007199254740993.00"));
+}
+
+#[test]
 fn rejected_path_never_invokes_renderer() {
     let renderer = MockRenderer::default();
     assert_eq!(renderer.invocation_count(), 0);
@@ -226,4 +262,38 @@ fn controlled_frontends_cover_condition_operators_and_enforcement() {
         blocked.policy_constraints[0].enforcement,
         Enforcement::BlockExecution
     );
+}
+
+#[test]
+fn needs_clarification_never_produces_executable_uir() {
+    let resolution = resolve_input(
+        "Verify company ACME metric revenue",
+        &CompileOptions::default(),
+    );
+    assert_eq!(
+        resolution.status,
+        SemanticResolutionStatus::NeedsClarification
+    );
+    assert_eq!(resolution.missing_slots, ["period"]);
+    assert!(resolution.uir.is_none());
+    let renderer = MockRenderer::default();
+    assert_eq!(renderer.invocation_count(), 0);
+}
+
+#[test]
+fn typed_lexicon_generalizes_surface_forms_without_entity_instances() {
+    let en = compile_input(
+        "Please substantiate the 2025 total assets figure associated with ZXQ",
+        &CompileOptions::default(),
+    )
+    .unwrap();
+    let ko = compile_input(
+        "ZXQ의 2025년 총자산 수치를 출처와 함께 알려주세요",
+        &CompileOptions::default(),
+    )
+    .unwrap();
+    assert_eq!(en.semantics.intent, Intent::Verify);
+    assert_eq!(en.semantics.target.entity_id, "ZXQ");
+    assert_eq!(en.semantics.parameters["metric"], "assets");
+    assert_eq!(semantic_digest(&en).unwrap(), semantic_digest(&ko).unwrap());
 }

@@ -1,9 +1,13 @@
 mod en;
 mod ko;
+pub mod lexicon;
+mod normalization;
+mod pipeline;
 mod router;
 
 pub use en::EnglishFrontend;
 pub use ko::KoreanFrontend;
+pub use lexicon::{CanonicalOperator, EnglishLexicon, KoreanLexicon, SemanticLexicon};
 pub use router::LanguageRouter;
 
 use crate::{Language, UirCompileError, UniversalIrDraft};
@@ -45,3 +49,4 @@ pub(crate) fn reject_adversarial(input: &str) -> Result<(), UirCompileError> {
     }
     Ok(())
 }
+mod condition_parser;

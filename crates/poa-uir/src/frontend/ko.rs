@@ -1,11 +1,10 @@
 use std::collections::BTreeMap;
 
-use regex::Regex;
-
+use super::lexicon::KoreanLexicon;
 use crate::{
-    Condition, DslFrontend, Enforcement, ExecutionContract, ExecutionMode, FailureBehavior, Intent,
-    Language, OutputContract, OutputFormat, PolicyConstraint, PolicyLevel, ScalarValue, Semantics,
-    Target, UirCompileError, UniversalIrDraft, UnsupportedClaimBehavior,
+    DslFrontend, Enforcement, ExecutionContract, ExecutionMode, FailureBehavior, Intent, Language,
+    OutputContract, OutputFormat, PolicyConstraint, PolicyLevel, Semantics, Target,
+    UirCompileError, UniversalIrDraft, UnsupportedClaimBehavior,
 };
 
 #[derive(Default)]
@@ -17,37 +16,8 @@ impl DslFrontend for KoreanFrontend {
     }
 
     fn compile(&self, input: &str) -> Result<UniversalIrDraft, UirCompileError> {
-        super::reject_adversarial(input)?;
-        let intent = if input.contains("비교") {
-            Intent::Compare
-        } else if input.contains("원인") || input.contains("추적") {
-            Intent::CauseTrace
-        } else if input.contains("요약") {
-            Intent::Summarize
-        } else if input.contains("추출") {
-            Intent::Extract
-        } else if input.contains("분석") {
-            Intent::Analyze
-        } else if input.contains("검증") || input.contains("확인") {
-            Intent::Verify
-        } else {
-            return Err(UirCompileError::Incomplete("intent".into()));
-        };
-        let entity = capture(input, r"(?:기업|대상|엔터티)\s+([A-Z][A-Z0-9_-]{1,31})")
-            .ok_or_else(|| UirCompileError::Incomplete("target".into()))?;
-        let metric = capture(input, r"(?:지표|항목)\s+([a-z][a-z0-9_]{1,31})")
-            .unwrap_or_else(|| "value".into());
-        let year = capture(input, r"(20\d{2})년?").unwrap_or_else(|| "2025".into());
-        build(intent, entity, metric, year, input)
+        super::pipeline::compile_typed(input, Language::Ko, &KoreanLexicon)
     }
-}
-
-fn capture(input: &str, pattern: &str) -> Option<String> {
-    Regex::new(pattern)
-        .ok()?
-        .captures(input)?
-        .get(1)
-        .map(|value| value.as_str().to_owned())
 }
 
 pub(crate) fn build(
@@ -68,7 +38,7 @@ pub(crate) fn build(
     parameters.insert("metric".into(), metric.clone());
     parameters.insert("period".into(), year.clone());
     parameters.insert("actor".into(), "research-agent".into());
-    let condition = condition_from_input(input);
+    let condition = super::condition_parser::parse_condition(input);
     let lowered = input.to_lowercase();
     let enforcement = if input.contains("차단") || lowered.contains("block") {
         Enforcement::BlockExecution
@@ -118,49 +88,4 @@ pub(crate) fn build(
         },
         domain: "research_finance".into(),
     })
-}
-
-fn condition_from_input(input: &str) -> Condition {
-    let lowered = input.to_lowercase();
-    let verified = || Condition::Eq {
-        lhs: "entity_verified".into(),
-        rhs: ScalarValue::Boolean(true),
-    };
-    let policy_verified = || Condition::Eq {
-        lhs: "policy_verified".into(),
-        rhs: ScalarValue::Boolean(true),
-    };
-    if input.contains("예외") || lowered.contains("unless") || lowered.contains("except") {
-        Condition::Except {
-            rule: Box::new(verified()),
-            exception: Box::new(Condition::Eq {
-                lhs: "exception_authorized".into(),
-                rhs: ScalarValue::Boolean(true),
-            }),
-        }
-    } else if input.contains("그리고") || lowered.contains(" and ") {
-        Condition::And {
-            exprs: vec![verified(), policy_verified()],
-        }
-    } else if input.contains("또는") || lowered.contains(" or ") {
-        Condition::Or {
-            exprs: vec![verified(), policy_verified()],
-        }
-    } else if input.contains("아님") || lowered.contains(" not ") {
-        Condition::Not {
-            expr: Box::new(verified()),
-        }
-    } else if input.contains("초과") || lowered.contains("greater than") {
-        Condition::Gt {
-            lhs: "threshold".into(),
-            rhs: ScalarValue::Integer(0),
-        }
-    } else if input.contains("미만") || lowered.contains("less than") {
-        Condition::Lt {
-            lhs: "threshold".into(),
-            rhs: ScalarValue::Integer(0),
-        }
-    } else {
-        verified()
-    }
 }

@@ -71,6 +71,7 @@ pub enum UnsupportedClaimBehavior {
     Reject,
     Remove,
     Flag,
+    FilterAndRender,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
