@@ -1,8 +1,11 @@
 use std::collections::BTreeMap;
+use std::io::Write;
+use std::process::{Command, Stdio};
 
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
-use crate::{UnsupportedClaimBehavior, ValidatedUir};
+use crate::{UniversalIr, UnsupportedClaimBehavior, ValidatedUir};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -102,8 +105,22 @@ pub fn validate_output(
 }
 
 pub trait Renderer {
-    fn render(&mut self, uir: &ValidatedUir, facts: &VerifiedFactSet) -> GeneratedOutput;
+    fn render(
+        &mut self,
+        uir: &ValidatedUir,
+        facts: &VerifiedFactSet,
+    ) -> Result<GeneratedOutput, RenderError>;
     fn invocation_count(&self) -> u64;
+}
+
+#[derive(Debug, Error)]
+pub enum RenderError {
+    #[error("renderer I/O failed: {0}")]
+    Io(#[from] std::io::Error),
+    #[error("renderer subprocess failed: {0}")]
+    Subprocess(String),
+    #[error("renderer protocol failed: {0}")]
+    Protocol(#[from] serde_json::Error),
 }
 
 #[derive(Default)]
@@ -122,7 +139,11 @@ impl MockRenderer {
 }
 
 impl Renderer for MockRenderer {
-    fn render(&mut self, _: &ValidatedUir, facts: &VerifiedFactSet) -> GeneratedOutput {
+    fn render(
+        &mut self,
+        _: &ValidatedUir,
+        facts: &VerifiedFactSet,
+    ) -> Result<GeneratedOutput, RenderError> {
         self.invocations += 1;
         let mut claims: Vec<_> = facts
             .0
@@ -142,11 +163,95 @@ impl Renderer for MockRenderer {
                 provenance: None,
             });
         }
-        GeneratedOutput {
+        Ok(GeneratedOutput {
             text: "verified facts rendered".into(),
             claims,
+        })
+    }
+    fn invocation_count(&self) -> u64 {
+        self.invocations
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LocalSlmRendererConfig {
+    pub python_executable: String,
+    pub bridge_script: String,
+    pub model: String,
+    pub temperature: f64,
+    pub top_p: f64,
+    pub top_k: u64,
+    pub max_new_tokens: u64,
+    pub repetition_penalty: f64,
+    pub seed: u64,
+}
+
+pub struct LocalSlmRenderer {
+    config: LocalSlmRendererConfig,
+    invocations: u64,
+}
+
+#[derive(Serialize)]
+struct LocalSlmRequest<'a> {
+    model: &'a str,
+    uir: &'a UniversalIr,
+    facts: &'a VerifiedFactSet,
+    temperature: f64,
+    top_p: f64,
+    top_k: u64,
+    max_new_tokens: u64,
+    repetition_penalty: f64,
+    seed: u64,
+}
+
+impl LocalSlmRenderer {
+    pub fn new(config: LocalSlmRendererConfig) -> Self {
+        Self {
+            config,
+            invocations: 0,
         }
     }
+}
+
+impl Renderer for LocalSlmRenderer {
+    fn render(
+        &mut self,
+        uir: &ValidatedUir,
+        facts: &VerifiedFactSet,
+    ) -> Result<GeneratedOutput, RenderError> {
+        self.invocations += 1;
+        let mut child = Command::new(&self.config.python_executable)
+            .arg(&self.config.bridge_script)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()?;
+        let request = LocalSlmRequest {
+            model: &self.config.model,
+            uir: uir.as_uir(),
+            facts,
+            temperature: self.config.temperature,
+            top_p: self.config.top_p,
+            top_k: self.config.top_k,
+            max_new_tokens: self.config.max_new_tokens,
+            repetition_penalty: self.config.repetition_penalty,
+            seed: self.config.seed,
+        };
+        child
+            .stdin
+            .take()
+            .ok_or_else(|| RenderError::Subprocess("stdin unavailable".into()))?
+            .write_all(&serde_json::to_vec(&request)?)?;
+        let output = child.wait_with_output()?;
+        if !output.status.success() {
+            return Err(RenderError::Subprocess(
+                String::from_utf8_lossy(&output.stderr).trim().to_owned(),
+            ));
+        }
+        Ok(serde_json::from_slice(&output.stdout)?)
+    }
+
     fn invocation_count(&self) -> u64 {
         self.invocations
     }

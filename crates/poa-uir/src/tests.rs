@@ -147,7 +147,7 @@ fn output_contract_rejects_unsupported_claim() {
     let validated = validate(uir).unwrap();
     let facts = FixtureExecutor.execute(&validated).unwrap();
     let mut renderer = MockRenderer::new(true);
-    let output = renderer.render(&validated, &facts);
+    let output = renderer.render(&validated, &facts).unwrap();
     let result = validate_output(&validated, &facts, &output);
     assert!(!result.accepted);
     assert_eq!(result.unsupported_claim_count, 1);

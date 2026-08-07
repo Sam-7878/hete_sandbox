@@ -158,7 +158,7 @@ fn execute(case: Case) -> Record {
         let facts = FixtureExecutor.execute(&validated).unwrap_or_default();
         latency.executor_us = micros(started);
         let started = Instant::now();
-        let output = renderer.render(&validated, &facts);
+        let output = renderer.render(&validated, &facts).expect("mock rendering");
         latency.slm_us = micros(started);
         let started = Instant::now();
         let validation = validate_output(&validated, &facts, &output);
