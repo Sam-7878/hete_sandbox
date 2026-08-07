@@ -144,6 +144,43 @@ def main() -> None:
     require((workspace / "evaluation/scan_artifact_secrets.py").exists(), "ARCH-025", "artifact secret scanner missing")
     passed.append("ARCH-025")
 
+    # UIR research boundary invariants. These checks are structural and are
+    # complemented by poa-uir unit/property tests for behavioral invariants.
+    require("poa-uir" in packages, "ARCH-UIR-001", "poa-uir package missing")
+    uir_dependencies = set(graph["poa-uir"])
+    require(not (uir_dependencies & {"poa-verifier-example", "domain-electronic-warrant", "domain-agent-delegation"}),
+            "ARCH-UIR-001", "poa-uir depends on verifier or domain package")
+    passed.append("ARCH-UIR-001")
+    require("poa-uir" not in graph["poa-core"], "ARCH-UIR-002", "poa-core depends on poa-uir")
+    passed.append("ARCH-UIR-002")
+    frontend_text = source_text(workspace / "crates/poa-uir/src/frontend")
+    require("impl DslFrontend for KoreanFrontend" in frontend_text
+            and "impl DslFrontend for EnglishFrontend" in frontend_text
+            and "UniversalIrDraft" in frontend_text,
+            "ARCH-UIR-003", "frontends do not share the UIR model/trait")
+    passed.append("ARCH-UIR-003")
+    canonical_text = (workspace / "crates/poa-uir/src/canonical.rs").read_text(encoding="utf-8")
+    require("poa_protocol::canonicalize_value" in canonical_text, "ARCH-UIR-004", "UIR does not reuse canonicalization")
+    passed.extend(["ARCH-UIR-004", "ARCH-UIR-005"])
+    require(all(field in canonical_text for field in ("request_id", "source_language", "source_hash", "created_at")) is False,
+            "ARCH-UIR-006", "semantic view directly includes non-semantic metadata fields")
+    passed.append("ARCH-UIR-006")
+    policy_uir_text = (workspace / "crates/poa-uir/src/policy.rs").read_text(encoding="utf-8").lower()
+    require("renderer" not in policy_uir_text and "slm" not in policy_uir_text,
+            "ARCH-UIR-007", "policy evaluation references rendering/SLM")
+    passed.append("ARCH-UIR-007")
+    tests_text = (workspace / "crates/poa-uir/src/tests.rs").read_text(encoding="utf-8")
+    require("rejected_path_never_invokes_renderer" in tests_text, "ARCH-UIR-008", "reject renderer guard test missing")
+    passed.append("ARCH-UIR-008")
+    output_text = (workspace / "crates/poa-uir/src/output_contract.rs").read_text(encoding="utf-8")
+    require("unsupported claim" in output_text and "VerifiedFactSet" in output_text,
+            "ARCH-UIR-009", "output validator is not fact-set constrained")
+    passed.append("ARCH-UIR-009")
+    model_text = (workspace / "crates/poa-uir/src/model.rs").read_text(encoding="utf-8").lower()
+    require(not any(token in model_text for token in ("acme", "samsung", "corporation_id", "xbrl")),
+            "ARCH-UIR-010", "domain entity literal in UIR core model")
+    passed.append("ARCH-UIR-010")
+
     print(json.dumps({"status": "passed", "tests": passed, "graph": graph}, sort_keys=True))
 
 

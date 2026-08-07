@@ -5,6 +5,7 @@ members = [
     "crates/poa-protocol",
     "crates/poa-sandbox",
     "crates/poa-verifier-example",
+    "crates/poa-uir",
     "crates/hete-identity",
     "crates/hete-policy",
     "crates/hete-credential",

@@ -949,6 +949,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "poa-uir"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "hex",
+ "jsonschema",
+ "poa-core",
+ "poa-protocol",
+ "regex",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
+]
+
+[[package]]
 name = "poa-verifier-example"
 version = "0.1.0"
 dependencies = [
