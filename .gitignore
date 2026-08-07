@@ -37,7 +37,7 @@ target/
 formal/tools/*.jar
 
 # docs/architecture/
-docs/work_reports/*
+docs/work_reports/
 results/*
 
 
