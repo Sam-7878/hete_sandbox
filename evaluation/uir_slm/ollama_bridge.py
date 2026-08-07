@@ -18,7 +18,7 @@ def main() -> None:
         payload = json.loads(result.text)
     except json.JSONDecodeError as error:
         raise SystemExit(f"SLM_FORMAT_ERROR:{error.msg}") from error
-    facts = request["facts"][0] if isinstance(request["facts"], list) else request["facts"].get("0", [])
+    facts = request["facts"] if isinstance(request["facts"], list) else request["facts"].get("0", [])
     allowed_types = {fact["claim_type"] for fact in facts}
     converted = []
     for claim in payload.get("claims", []):
