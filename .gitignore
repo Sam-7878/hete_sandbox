@@ -38,7 +38,7 @@ formal/tools/*.jar
 
 # docs/architecture/
 docs/work_reports/
-results/*
+results/
 
 
 # Generated after the tagged clean-tree baseline; retained locally/artifacted.

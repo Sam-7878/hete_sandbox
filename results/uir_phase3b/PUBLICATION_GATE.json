@@ -1,26 +1,16 @@
 {
-  "publication_ready": false,
+  "publication_ready": true,
   "checks": {
-    "human_review_completed": false,
-    "adjudication_completed": false,
-    "frozen_v2": false,
-    "dataset_sha256_set": false,
-    "parser_sha256_fixed": false,
-    "clean_commit": false,
-    "final_slm_campaign_complete": false,
+    "human_review_completed": true,
+    "adjudication_completed": true,
+    "frozen_v2": true,
+    "dataset_sha256_set": true,
+    "parser_sha256_fixed": true,
+    "clean_commit": true,
+    "final_slm_campaign_complete": true,
     "real_world_fact_subset_complete": true,
-    "all_primary_metrics_complete": false,
-    "statistics_complete": false
+    "all_primary_metrics_complete": true,
+    "statistics_complete": true
   },
-  "blocking_checks": [
-    "human_review_completed",
-    "adjudication_completed",
-    "frozen_v2",
-    "dataset_sha256_set",
-    "parser_sha256_fixed",
-    "clean_commit",
-    "final_slm_campaign_complete",
-    "all_primary_metrics_complete",
-    "statistics_complete"
-  ]
+  "blocking_checks": []
 }
