@@ -218,6 +218,35 @@ def main() -> None:
             "ARCH-UIR-GEN-006", "publication-ready report lacks human-review gate")
     passed.append("ARCH-UIR-GEN-006")
 
+    phase3b = workspace / "evaluation/uir_phase3b"
+    freeze_record = json.loads((phase3b / "PARSER_FREEZE.json").read_text(encoding="utf-8"))
+    require(freeze_record.get("status") == "frozen_before_human_review"
+            and freeze_record.get("parser_source_sha256") == phase3_manifest.get("parser_source_sha256"),
+            "ARCH-UIR-3B-001", "parser freeze record is missing or inconsistent")
+    passed.append("ARCH-UIR-3B-001")
+    review_manifest = json.loads((phase3b / "review/REVIEW_PACKAGE_MANIFEST.json").read_text(encoding="utf-8"))
+    require(review_manifest.get("judgments_prefilled") is False
+            and review_manifest.get("allowed_values") == ["1", "0", "NA"],
+            "ARCH-UIR-3B-002", "human review package is prefilled or has open labels")
+    passed.append("ARCH-UIR-3B-002")
+    phase3b_publisher = (phase3b / "generate_publication_report.py").read_text(encoding="utf-8")
+    require("publication_ready" in phase3b_publisher and "REPORT_PUBLICATION_READY.md was not created" in phase3b_publisher,
+            "ARCH-UIR-3B-003", "publication report lacks a fail-closed gate")
+    passed.append("ARCH-UIR-3B-003")
+    campaign_text = (workspace / "evaluation/uir_slm/run_slm_campaign.py").read_text(encoding="utf-8")
+    require("B6_UIR_FILTER_AND_RENDER" in campaign_text and "filter_and_render" in campaign_text,
+            "ARCH-UIR-3B-004", "B6 FILTER_AND_RENDER campaign is missing")
+    passed.append("ARCH-UIR-3B-004")
+    real_manifest = json.loads((workspace / "results/uir_phase3b/real_fact_subset_manifest.json").read_text(encoding="utf-8"))
+    require(real_manifest.get("case_count") == 200 and real_manifest.get("registry_sha256"),
+            "ARCH-UIR-3B-005", "real-world SEC subset is incomplete or unbound")
+    passed.append("ARCH-UIR-3B-005")
+    final_runner = (phase3b / "run_publication_campaign.py").read_text(encoding="utf-8")
+    require("git\",\"status\",\"--porcelain" in final_runner.replace(" ", "")
+            and "clean worktree" in final_runner and "dataset_sha256" in final_runner,
+            "ARCH-UIR-3B-006", "final campaign lacks clean-tree/hash gates")
+    passed.append("ARCH-UIR-3B-006")
+
     print(json.dumps({"status": "passed", "tests": passed, "graph": graph}, sort_keys=True))
 
 

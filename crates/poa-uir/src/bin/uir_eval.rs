@@ -23,6 +23,8 @@ struct Case {
     expected_policy_decision: String,
     #[serde(default)]
     expected_semantics: serde_json::Value,
+    #[serde(default)]
+    expected_conditions: serde_json::Value,
     #[serde(default = "yes")]
     entity_valid: bool,
     #[serde(default = "yes")]
@@ -57,6 +59,8 @@ struct Record {
     stage_latencies_us: StageLatenciesUs,
     exact_structural_match: bool,
     semantic_match: bool,
+    condition_ast_exact_match: bool,
+    resolution_status: String,
     actual_semantics: serde_json::Value,
 }
 
@@ -84,21 +88,26 @@ fn execute(case: Case) -> Record {
     let total = Instant::now();
     let mut latency = StageLatenciesUs::default();
     let started = Instant::now();
-    let compiled = compile_input(
-        &case.input,
-        &CompileOptions {
-            request_id: case.case_id.clone(),
-            created_at: "2026-08-07T00:00:00Z".into(),
-            compiler_version: env!("CARGO_PKG_VERSION").into(),
-        },
-    );
+    let options = CompileOptions {
+        request_id: case.case_id.clone(),
+        created_at: "2026-08-07T00:00:00Z".into(),
+        compiler_version: env!("CARGO_PKG_VERSION").into(),
+    };
+    let compiled = compile_input(&case.input, &options);
     latency.dsl_compile_us = micros(started);
     let Ok(uir) = compiled else {
+        let resolution = resolve_input(&case.input, &options);
+        let outcome = if resolution.status == SemanticResolutionStatus::NeedsClarification {
+            "NEEDS_CLARIFICATION"
+        } else {
+            "REJECT"
+        };
         return terminal(
             case,
-            "REJECT",
+            outcome,
             "REJECT",
             Some("UIR_SCHEMA_INVALID".into()),
+            format!("{:?}", resolution.status).to_uppercase(),
             latency,
             total,
         );
@@ -106,6 +115,9 @@ fn execute(case: Case) -> Record {
     let actual_semantics = semantic_projection(&uir);
     let semantic_match =
         case.expected_semantics.is_null() || case.expected_semantics == actual_semantics;
+    let actual_conditions = serde_json::to_value(&uir.semantics.conditions).unwrap_or_default();
+    let condition_ast_exact_match =
+        case.expected_conditions.is_null() || case.expected_conditions == actual_conditions;
     let serialized_bytes = serde_json::to_vec(&uir).map_or(0, |bytes| bytes.len());
     let started = Instant::now();
     let validated = validate(uir.clone());
@@ -116,6 +128,7 @@ fn execute(case: Case) -> Record {
             "REJECT",
             "REJECT",
             Some("UIR_SEMANTIC_INVALID".into()),
+            "INVALID".into(),
             latency,
             total,
         );
@@ -217,8 +230,10 @@ fn execute(case: Case) -> Record {
             .into(),
         serialized_bytes: canonical.map_or(serialized_bytes, |value| value.len()),
         stage_latencies_us: latency,
-        exact_structural_match: semantic_match,
+        exact_structural_match: semantic_match && condition_ast_exact_match,
         semantic_match,
+        condition_ast_exact_match,
+        resolution_status: "RESOLVED".into(),
         actual_semantics,
     }
 }
@@ -228,6 +243,7 @@ fn terminal(
     outcome: &str,
     decision: &str,
     reason: Option<String>,
+    resolution_status: String,
     mut latency: StageLatenciesUs,
     total: Instant,
 ) -> Record {
@@ -252,8 +268,11 @@ fn terminal(
         output_validation_result: "not_invoked".into(),
         serialized_bytes: 0,
         stage_latencies_us: latency,
-        exact_structural_match: case.expected_semantics.is_null(),
+        exact_structural_match: case.expected_semantics.is_null()
+            && case.expected_conditions.is_null(),
         semantic_match: case.expected_semantics.is_null(),
+        condition_ast_exact_match: case.expected_conditions.is_null(),
+        resolution_status,
         actual_semantics: serde_json::Value::Null,
     }
 }

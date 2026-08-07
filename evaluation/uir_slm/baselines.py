@@ -10,7 +10,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "uir_external"))
 from registry_adapter import FrozenRegistry, fact_context
 
-PIPELINES = ["B0_DIRECT_SLM", "B1_SLM_WITH_PROMPT_GUARD", "B2_NAIVE_RAG_SLM", "B3_RAG_WITH_ENTITY_VALIDATION", "B4_UIR_POLICY_SLM", "B5_FULL_UIR_OUTPUT_VALIDATION"]
+PIPELINES = ["B0_DIRECT_SLM", "B1_SLM_WITH_PROMPT_GUARD", "B2_NAIVE_RAG_SLM", "B3_RAG_WITH_ENTITY_VALIDATION", "B4_UIR_POLICY_SLM", "B5_FULL_UIR_OUTPUT_VALIDATION", "B6_UIR_FILTER_AND_RENDER"]
 SCHEMA = '{"answer":"brief text","claims":[{"claim_type":"entity_claim|attribute_claim|numeric_claim|relation_claim|temporal_claim|provenance_claim","entity_id":"exact id","attribute":"exact attribute","value":"exact source text","unit":"exact unit or empty","period":"exact period or empty","provenance":"exact source_id or empty"}]}'
 
 
@@ -47,7 +47,7 @@ def build_request(pipeline: str, case: dict, registry: FrozenRegistry, uir_recor
     if pipeline == "B3_RAG_WITH_ENTITY_VALIDATION":
         if not case.get("entity_valid", False): return PipelineRequest(False, "", "", [], "ENTITY_UNVERIFIED")
         return PipelineRequest(True, "Use only the exact-entity context. Do not add facts.", common_prompt(user_input, json.dumps(facts, ensure_ascii=False, sort_keys=True)), facts)
-    if pipeline in {"B4_UIR_POLICY_SLM", "B5_FULL_UIR_OUTPUT_VALIDATION"}:
+    if pipeline in {"B4_UIR_POLICY_SLM", "B5_FULL_UIR_OUTPUT_VALIDATION", "B6_UIR_FILTER_AND_RENDER"}:
         core_permit = case.get("uir_ready", False) or (uir_record is not None and uir_record.get("actual_outcome") == "COMMIT")
         if not core_permit or not case.get("entity_valid", False) or not case.get("policy_valid", False): return PipelineRequest(False, "", "", [], (uir_record or {}).get("reason_code") or "UIR_POLICY_REJECT")
         system = "The UIR and policy authorize rendering only the verified claims. Do not infer external facts."
