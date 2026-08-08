@@ -99,7 +99,8 @@ def build_prompt(reviewer: str, batch: list[dict]) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reviewer", choices=REVIEWERS, required=True)
-    parser.add_argument("--agy", type=Path, default=ROOT / ".tools/antigravity/agy")
+    default_agy = Path("/home/sam/.local/bin/agy") if Path("/home/sam/.local/bin/agy").exists() else ROOT / ".tools/antigravity/agy"
+    parser.add_argument("--agy", type=Path, default=default_agy)
     parser.add_argument("--batch-size", type=int, default=25)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--max-attempts", type=int, default=3)
