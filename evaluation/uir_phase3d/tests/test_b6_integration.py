@@ -48,8 +48,8 @@ def test_compact_fact_ids_resolve_authoritative_numeric_unit_and_provenance():
 def test_actual_audit_ingestion_rejects_script_only_judgment(tmp_path):
     spec3=importlib.util.spec_from_file_location("ingest",ROOT/"evaluation/uir_phase3d/ingest_actual_ai_reviews.py")
     ingest=importlib.util.module_from_spec(spec3);spec3.loader.exec_module(ingest)
-    record={"reviewer_id":"AI-R1","engine":"AntiGravity Sonnet 4.6","case_id":"C1","prompt_template_sha256":"p","judgment":{f:"1" for f in ingest.FIELDS}}
+    record={"reviewer_id":"AI-R1","engine":"AntiGravity Gemini 3.5 Flash","case_id":"C1","prompt_template_sha256":"p","judgment":{f:"1" for f in ingest.FIELDS}}
     path=tmp_path/"review.jsonl";path.write_text(__import__("json").dumps(record)+"\n")
     import pytest
     with pytest.raises(ValueError,match="provenance"):
-        ingest.validate_file(path,"AI-R1","AntiGravity Sonnet 4.6","p",{"C1"})
+        ingest.validate_file(path,"AI-R1","AntiGravity Gemini 3.5 Flash","p",{"C1"})
