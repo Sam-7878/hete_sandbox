@@ -1,0 +1,77 @@
+name: electronic-warrant
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      publication:
+        description: Run the full publication campaign
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - run: cargo test --workspace --all-features
+      - run: python evaluation/check_architecture.py
+      - run: python evaluation/check_warrant_invariants.py --skip-rust
+      - run: python evaluation/check_formal_model.py
+      - run: python evaluation/check_trace_conformance.py
+      - run: python evaluation/experiments/functional_correctness.py --smoke
+
+  release-evidence:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: cargo build --workspace --release
+      - run: sh formal/scripts/bootstrap_tlc.sh
+      - run: sh formal/scripts/run_tlc.sh safety ci-safety 2
+      - run: sh formal/scripts/run_tlc.sh liveness ci-liveness 2
+      - run: cargo run --release -p publication-evaluation --bin full_benchmark -- ci-smoke 10 /tmp/full-benchmark-smoke.csv $GITHUB_SHA github-host 1
+      - run: python evaluation/analysis/verify_raw_hashes.py
+      - run: python evaluation/scan_artifact_secrets.py
+
+  publication:
+    if: github.event_name == 'workflow_dispatch' && inputs.publication
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy scipy matplotlib psutil
+      - run: python evaluation/run_full_benchmark.py
+      - run: python evaluation/run_concurrency_failure_campaign.py
+      - run: python evaluation/run_attack_campaign.py
+      - run: python evaluation/run_privacy_linkability_campaign.py
+      - run: cargo run --release -p publication-evaluation --bin adapter_comparison -- 30 1000 evaluation/results/raw/adapter_comparison.csv $GITHUB_SHA github-host
+      - run: python evaluation/analysis/verify_raw_hashes.py --write
+      - run: python evaluation/analysis/aggregate_results.py
+      - run: python evaluation/analysis/statistical_tests.py
+      - run: python evaluation/analysis/generate_figures.py
+      - run: python evaluation/analysis/generate_tables.py
