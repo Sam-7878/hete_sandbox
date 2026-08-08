@@ -6,7 +6,7 @@ from collections import Counter,defaultdict
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]; PACKETS=ROOT/"evaluation/uir_phase3d/audit_packets"; OUT=ROOT/"results/uir_phase3d"
-REVIEWERS={"AI-R1":"AntiGravity Sonnet 4.6","AI-R2":"AntiGravity Gemini 3.6 Flash","AI-R3":"AntiGravity Opus 4.6"}
+REVIEWERS={"AI-R1":"AntiGravity Gemini 3.5 Flash","AI-R2":"AntiGravity Gemini 3.6 Flash","AI-R3":"AntiGravity Gemini 3.1 Pro"}
 FIELDS=["source_text_valid","language_valid","intent_valid","target_valid","conditions_valid","policy_valid","outcome_valid","claims_valid"]
 ALLOWED={"1","0","NA"}
 def read(path):

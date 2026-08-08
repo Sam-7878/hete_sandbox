@@ -17,9 +17,9 @@ SCHEMA = ROOT / "evaluation/uir_phase3d/actual_ai_batch_response.schema.json"
 WORK = ROOT / "results/uir_phase3d/actual_ai_work"
 
 REVIEWERS = {
-    "AI-R1": ("claude-sonnet-4-6", "AntiGravity Sonnet 4.6", None),
+    "AI-R1": ("gemini-3.5-flash", "AntiGravity Gemini 3.5 Flash", "high"),
     "AI-R2": ("gemini-3.6-flash-high", "AntiGravity Gemini 3.6 Flash", "high"),
-    "AI-R3": ("claude-opus-4-6-thinking", "AntiGravity Opus 4.6", None),
+    "AI-R3": ("gemini-3.1-pro", "AntiGravity Gemini 3.1 Pro", "high"),
 }
 FIELDS = [
     "source_text_valid", "language_valid", "intent_valid", "target_valid",
@@ -145,12 +145,20 @@ def main() -> None:
             result = subprocess.run(command, cwd=isolated_workspace, text=True, capture_output=True, timeout=args.timeout_seconds + 60)
             timestamp = datetime.now(timezone.utc).isoformat()
             try:
-                outer = json.loads(result.stdout)
+                lines = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+                if not lines:
+                    raise ValueError("empty CLI output")
+                outers = [json.loads(line) for line in lines]
+                for o in outers:
+                    if o.get("status") == "ERROR":
+                        raise ValueError(f"CLI status=ERROR: {o.get('error')}")
+                success_outers = [o for o in outers if o.get("status") == "SUCCESS"]
+                outer = success_outers[-1] if success_outers else outers[-1]
                 if result.returncode or outer.get("status") != "SUCCESS":
                     raise ValueError(f"CLI status={outer.get('status')} returncode={result.returncode}: {outer.get('error')}")
-                raw_response = outer.get("response", "")
+                raw_response = outer.get("structured_output") or outer.get("response", "")
                 judgments = validate_judgments(parse_response(raw_response), case_ids)
-                raw_hash = hashlib.sha256(str(raw_response).encode("utf-8")).hexdigest()
+                raw_hash = hashlib.sha256(str(outer.get("response", "")).encode("utf-8")).hexdigest()
                 batch_id = f"{args.reviewer}-{case_ids[0]}--{case_ids[-1]}"
                 capture = {
                     "batch_id": batch_id, "reviewer_id": args.reviewer, "engine": engine, "model_selector": model,
